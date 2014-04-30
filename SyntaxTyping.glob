@@ -1,0 +1,997 @@
+DIGEST ae89ae351f8bb41f808aa44029498ed2
+FSyntaxTyping
+R15:23 Ssreflect.ssreflect <> <> lib
+R25:28 Coq.Lists.List <> <> lib
+ind 747:751 <> sTree
+constr 758:763 <> sleafP
+constr 775:780 <> sleafN
+constr 792:797 <> sdummy
+constr 809:813 <> snode
+constr 843:848 <> sqnode
+R767:771 SyntaxTyping <> sTree ind
+R784:788 SyntaxTyping <> sTree ind
+R801:805 SyntaxTyping <> sTree ind
+R835:839 SyntaxTyping <> sTree ind
+R826:830 SyntaxTyping <> sTree ind
+R817:821 SyntaxTyping <> sTree ind
+R861:865 SyntaxTyping <> sTree ind
+R852:856 SyntaxTyping <> sTree ind
+ind 939:942 <> Tree
+constr 979:983 <> leafP
+constr 1006:1010 <> leafN
+constr 1033:1037 <> dummy
+constr 1055:1058 <> node
+constr 1120:1124 <> qnode
+R959:963 SyntaxTyping <> sTree ind
+R992:995 SyntaxTyping <> Tree ind
+R997:1002 SyntaxTyping <> sleafP constr
+R1019:1022 SyntaxTyping <> Tree ind
+R1024:1029 SyntaxTyping <> sleafN constr
+R1041:1044 SyntaxTyping <> Tree ind
+R1046:1051 SyntaxTyping <> sdummy constr
+R1099:1102 SyntaxTyping <> Tree ind
+R1105:1109 SyntaxTyping <> snode constr
+R1114:1115 SyntaxTyping <> s2 var
+R1111:1112 SyntaxTyping <> s1 var
+R1088:1091 SyntaxTyping <> Tree ind
+R1093:1094 SyntaxTyping <> s2 var
+R1077:1080 SyntaxTyping <> Tree ind
+R1082:1083 SyntaxTyping <> s1 var
+R1153:1156 SyntaxTyping <> Tree ind
+R1159:1164 SyntaxTyping <> sqnode constr
+R1166:1166 SyntaxTyping <> s var
+R1143:1146 SyntaxTyping <> Tree ind
+R1148:1148 SyntaxTyping <> s var
+R1181:1185 SyntaxTyping <> leafP constr
+R1181:1185 SyntaxTyping <> leafP constr
+R1209:1213 SyntaxTyping <> leafN constr
+R1209:1213 SyntaxTyping <> leafN constr
+R1237:1241 SyntaxTyping <> dummy constr
+R1237:1241 SyntaxTyping <> dummy constr
+R1263:1266 SyntaxTyping <> node constr
+R1263:1266 SyntaxTyping <> node constr
+R1298:1302 SyntaxTyping <> qnode constr
+R1298:1302 SyntaxTyping <> qnode constr
+def 1506:1513 <> Treelift
+R1558:1558 SyntaxTyping <> F var
+R1553:1553 SyntaxTyping <> E var
+R1592:1592 SyntaxTyping <> C var
+R1587:1587 SyntaxTyping <> A var
+R1626:1626 SyntaxTyping <> D var
+R1621:1621 SyntaxTyping <> B var
+R1675:1678 SyntaxTyping <> Tree ind
+R1686:1687 SyntaxTyping <> st var
+R1684:1684 SyntaxTyping <> D var
+R1682:1682 SyntaxTyping <> C var
+R1680:1680 SyntaxTyping <> F var
+R1657:1660 SyntaxTyping <> Tree ind
+R1668:1669 SyntaxTyping <> st var
+R1666:1666 SyntaxTyping <> B var
+R1664:1664 SyntaxTyping <> A var
+R1662:1662 SyntaxTyping <> E var
+R1820:1823 Coq.Init.Logic <> True ind
+R1820:1823 Coq.Init.Logic <> True ind
+R1835:1835 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1846:1849 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1861:1861 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1835:1835 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1846:1849 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1861:1861 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1874:1874 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1884:1887 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1898:1898 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1874:1874 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1884:1887 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R1898:1898 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+rec 2307:2311 <> World
+proj 2324:2327 <> PVar
+proj 2339:2342 <> NVar
+proj 2354:2357 <> QVar
+rec 2378:2385 <> ContType
+proj 2408:2412 <> readq
+proj 2435:2439 <> readp
+proj 2462:2466 <> readn
+R2428:2428 SyntaxTyping <> C var
+R2419:2422 SyntaxTyping <> QVar proj
+R2416:2416 SyntaxTyping <> w var
+R2455:2455 SyntaxTyping <> A var
+R2446:2449 SyntaxTyping <> PVar proj
+R2443:2443 SyntaxTyping <> w var
+R2482:2482 SyntaxTyping <> B var
+R2473:2476 SyntaxTyping <> NVar proj
+R2470:2470 SyntaxTyping <> w var
+def 2501:2507 <> Contmap
+R2549:2549 SyntaxTyping <> F var
+R2544:2544 SyntaxTyping <> E var
+R2573:2573 SyntaxTyping <> C var
+R2568:2568 SyntaxTyping <> A var
+R2598:2598 SyntaxTyping <> D var
+R2593:2593 SyntaxTyping <> B var
+R2641:2648 SyntaxTyping <> ContType rec
+R2656:2656 SyntaxTyping <> w var
+R2654:2654 SyntaxTyping <> D var
+R2652:2652 SyntaxTyping <> C var
+R2650:2650 SyntaxTyping <> F var
+R2620:2627 SyntaxTyping <> ContType rec
+R2635:2635 SyntaxTyping <> w var
+R2633:2633 SyntaxTyping <> B var
+R2631:2631 SyntaxTyping <> A var
+R2629:2629 SyntaxTyping <> E var
+R2686:2827 SyntaxTyping <> Build_ContType constr
+R2807:2808 SyntaxTyping <> fN var
+R2818:2822 SyntaxTyping <> readn proj
+R2825:2826 SyntaxTyping <> xn var
+R2811:2815 SyntaxTyping <> Gamma var
+R2756:2757 SyntaxTyping <> fP var
+R2767:2771 SyntaxTyping <> readp proj
+R2774:2775 SyntaxTyping <> xp var
+R2760:2764 SyntaxTyping <> Gamma var
+R2705:2706 SyntaxTyping <> fQ var
+R2716:2720 SyntaxTyping <> readq proj
+R2723:2724 SyntaxTyping <> xq var
+R2709:2713 SyntaxTyping <> Gamma var
+def 2852:2859 <> Contlift
+R2903:2903 SyntaxTyping <> F var
+R2898:2898 SyntaxTyping <> E var
+R2937:2937 SyntaxTyping <> C var
+R2932:2932 SyntaxTyping <> A var
+R2972:2972 SyntaxTyping <> D var
+R2967:2967 SyntaxTyping <> B var
+R3023:3030 SyntaxTyping <> ContType rec
+R3038:3038 SyntaxTyping <> w var
+R3036:3036 SyntaxTyping <> D var
+R3034:3034 SyntaxTyping <> C var
+R3032:3032 SyntaxTyping <> F var
+R3002:3009 SyntaxTyping <> ContType rec
+R3017:3017 SyntaxTyping <> w var
+R3015:3015 SyntaxTyping <> B var
+R3013:3013 SyntaxTyping <> A var
+R3011:3011 SyntaxTyping <> E var
+R3078:3078 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R3130:3142 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R3090:3093 SyntaxTyping <> RelQ var
+R3120:3124 SyntaxTyping <> readq proj
+R3127:3128 SyntaxTyping <> xq var
+R3115:3117 SyntaxTyping <> rho var
+R3103:3107 SyntaxTyping <> readq proj
+R3110:3111 SyntaxTyping <> xq var
+R3096:3100 SyntaxTyping <> Gamma var
+R3143:3143 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R3195:3208 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R3260:3260 Coq.Init.Logic <> :type_scope:x_'/\'_x not
+R3155:3158 SyntaxTyping <> RelP var
+R3185:3189 SyntaxTyping <> readp proj
+R3192:3193 SyntaxTyping <> xp var
+R3180:3182 SyntaxTyping <> rho var
+R3168:3172 SyntaxTyping <> readp proj
+R3175:3176 SyntaxTyping <> xp var
+R3161:3165 SyntaxTyping <> Gamma var
+R3220:3223 SyntaxTyping <> RelN var
+R3250:3254 SyntaxTyping <> readn proj
+R3257:3258 SyntaxTyping <> xn var
+R3245:3247 SyntaxTyping <> rho var
+R3233:3237 SyntaxTyping <> readn proj
+R3240:3241 SyntaxTyping <> xn var
+R3226:3230 SyntaxTyping <> Gamma var
+def 3739:3751 <> correctNaming
+R3796:3796 SyntaxTyping <> E var
+R3788:3791 SyntaxTyping <> qVar var
+R3815:3822 SyntaxTyping <> Treelift def
+R3976:3983 SyntaxTyping <> nametree var
+R3974:3974 SyntaxTyping <> v var
+R3829:3830 SyntaxTyping <> st var
+R3955:3958 Coq.Init.Logic <> True ind
+R3924:3927 Coq.Init.Logic <> True ind
+R3893:3895 Coq.Init.Logic <> :type_scope:x_'='_x not
+R3886:3890 SyntaxTyping <> Sigma var
+R3892:3892 SyntaxTyping <> q var
+R3896:3896 SyntaxTyping <> s var
+R3858:3858 SyntaxTyping <> D var
+R3851:3851 SyntaxTyping <> C var
+R3844:3844 SyntaxTyping <> B var
+R3837:3837 SyntaxTyping <> A var
+rec 3994:4004 <> ContextType
+proj 4018:4025 <> wextends
+proj 4058:4064 <> extends
+proj 4190:4193 <> corr
+proj 4587:4593 <> qinject
+proj 4642:4656 <> extends_qinject
+proj 4795:4798 <> qnew
+proj 4857:4868 <> extends_qnew
+R4046:4050 SyntaxTyping <> World rec
+R4037:4041 SyntaxTyping <> World rec
+R4028:4032 SyntaxTyping <> sTree ind
+R4084:4088 SyntaxTyping <> World rec
+R4116:4119 SyntaxTyping <> Tree ind
+R4127:4128 SyntaxTyping <> st var
+R4125:4125 SyntaxTyping <> B var
+R4123:4123 SyntaxTyping <> A var
+R4121:4121 SyntaxTyping <> C var
+R4153:4160 SyntaxTyping <> ContType rec
+R4169:4176 SyntaxTyping <> wextends meth
+R4181:4181 SyntaxTyping <> w var
+R4178:4179 SyntaxTyping <> st var
+R4166:4166 SyntaxTyping <> B var
+R4164:4164 SyntaxTyping <> A var
+R4162:4162 SyntaxTyping <> C var
+R4132:4139 SyntaxTyping <> ContType rec
+R4147:4147 SyntaxTyping <> w var
+R4145:4145 SyntaxTyping <> B var
+R4143:4143 SyntaxTyping <> A var
+R4141:4141 SyntaxTyping <> C var
+R4218:4222 SyntaxTyping <> World rec
+R4258:4258 SyntaxTyping <> F var
+R4253:4253 SyntaxTyping <> E var
+R4289:4289 SyntaxTyping <> C var
+R4284:4284 SyntaxTyping <> A var
+R4320:4320 SyntaxTyping <> D var
+R4315:4315 SyntaxTyping <> B var
+R4345:4352 SyntaxTyping <> ContType rec
+R4360:4360 SyntaxTyping <> w var
+R4358:4358 SyntaxTyping <> B var
+R4356:4356 SyntaxTyping <> A var
+R4354:4354 SyntaxTyping <> E var
+R4379:4386 SyntaxTyping <> ContType rec
+R4394:4394 SyntaxTyping <> w var
+R4392:4392 SyntaxTyping <> D var
+R4390:4390 SyntaxTyping <> C var
+R4388:4388 SyntaxTyping <> F var
+R4519:4526 SyntaxTyping <> Contlift def
+R4560:4566 SyntaxTyping <> extends meth
+R4574:4578 SyntaxTyping <> Gamma var
+R4568:4572 SyntaxTyping <> Delta var
+R4544:4550 SyntaxTyping <> extends meth
+R4554:4556 SyntaxTyping <> rho var
+R4552:4552 SyntaxTyping <> v var
+R4538:4541 SyntaxTyping <> RelN var
+R4533:4536 SyntaxTyping <> RelP var
+R4528:4531 SyntaxTyping <> RelQ var
+R4474:4481 SyntaxTyping <> Contlift def
+R4502:4506 SyntaxTyping <> Gamma var
+R4498:4500 SyntaxTyping <> rho var
+R4493:4496 SyntaxTyping <> RelN var
+R4488:4491 SyntaxTyping <> RelP var
+R4483:4486 SyntaxTyping <> RelQ var
+R4422:4429 SyntaxTyping <> Treelift def
+R4457:4461 SyntaxTyping <> Delta var
+R4455:4455 SyntaxTyping <> v var
+R4451:4452 SyntaxTyping <> st var
+R4441:4444 SyntaxTyping <> RelN var
+R4436:4439 SyntaxTyping <> RelP var
+R4431:4434 SyntaxTyping <> RelQ var
+R4631:4634 SyntaxTyping <> QVar proj
+R4615:4622 SyntaxTyping <> wextends meth
+R4627:4627 SyntaxTyping <> w var
+R4624:4625 SyntaxTyping <> st var
+R4605:4608 SyntaxTyping <> QVar proj
+R4602:4602 SyntaxTyping <> w var
+R4676:4680 SyntaxTyping <> World rec
+R4710:4713 SyntaxTyping <> Tree ind
+R4721:4722 SyntaxTyping <> st var
+R4719:4719 SyntaxTyping <> B var
+R4717:4717 SyntaxTyping <> A var
+R4715:4715 SyntaxTyping <> C var
+R4771:4773 Coq.Init.Logic <> :type_scope:x_'='_x not
+R4747:4751 SyntaxTyping <> readq proj
+R4755:4761 SyntaxTyping <> qinject meth
+R4768:4769 SyntaxTyping <> xq var
+R4766:4766 SyntaxTyping <> w var
+R4763:4764 SyntaxTyping <> st var
+R4731:4737 SyntaxTyping <> extends meth
+R4741:4743 SyntaxTyping <> rho var
+R4739:4739 SyntaxTyping <> v var
+R4779:4783 SyntaxTyping <> readq proj
+R4786:4787 SyntaxTyping <> xq var
+R4774:4776 SyntaxTyping <> rho var
+R4811:4814 SyntaxTyping <> Tree ind
+R4849:4850 SyntaxTyping <> st var
+R4844:4847 Coq.Init.Datatypes <> unit ind
+R4839:4842 Coq.Init.Datatypes <> unit ind
+R4833:4836 SyntaxTyping <> QVar proj
+R4817:4824 SyntaxTyping <> wextends meth
+R4829:4829 SyntaxTyping <> w var
+R4826:4827 SyntaxTyping <> st var
+R4888:4892 SyntaxTyping <> World rec
+R4919:4922 SyntaxTyping <> Tree ind
+R4930:4931 SyntaxTyping <> st var
+R4928:4928 SyntaxTyping <> B var
+R4926:4926 SyntaxTyping <> A var
+R4924:4924 SyntaxTyping <> C var
+R4939:4951 SyntaxTyping <> correctNaming def
+R4980:4983 SyntaxTyping <> qnew meth
+R4988:4988 SyntaxTyping <> w var
+R4985:4986 SyntaxTyping <> st var
+R4977:4977 SyntaxTyping <> v var
+R4970:4974 SyntaxTyping <> readq proj
+R4954:4960 SyntaxTyping <> extends meth
+R4964:4966 SyntaxTyping <> rho var
+R4962:4962 SyntaxTyping <> v var
+var 5063:5069 <> Context
+R5072:5082 SyntaxTyping <> ContextType rec
+var 5468:5475 <> Patterns
+var 5494:5500 <> PatTree
+R5515:5519 SyntaxTyping <> sTree ind
+R5503:5510 SyntaxTyping <> Patterns defax
+rec 5530:5539 <> QRenamable
+proj 5548:5564 <> QRenamablesupport
+proj 5587:5593 <> qrename
+R5663:5679 SyntaxTyping <> QRenamablesupport meth
+R5681:5685 SyntaxTyping <> QVar2 var
+R5636:5652 SyntaxTyping <> QRenamablesupport meth
+R5654:5658 SyntaxTyping <> QVar1 var
+R5625:5629 SyntaxTyping <> QVar2 var
+R5616:5620 SyntaxTyping <> QVar1 var
+rec 5701:5711 <> TermAlgebra
+proj 5724:5730 <> TermSet
+proj 5751:5757 <> varTerm
+proj 5794:5806 <> varTermRename
+R5735:5744 SyntaxTyping <> QRenamable rec
+R5776:5782 SyntaxTyping <> TermSet meth
+R5784:5787 SyntaxTyping <> qVar var
+R5768:5771 SyntaxTyping <> qVar var
+R5853:5857 SyntaxTyping <> qVar' var
+R5845:5848 SyntaxTyping <> qVar var
+R5885:5887 Coq.Init.Logic <> :type_scope:x_'='_x not
+R5869:5875 SyntaxTyping <> varTerm meth
+R5878:5880 SyntaxTyping <> ren var
+R5882:5883 SyntaxTyping <> xq var
+R5897:5903 SyntaxTyping <> qrename proj
+R5911:5917 SyntaxTyping <> varTerm meth
+R5919:5920 SyntaxTyping <> xq var
+R5906:5908 SyntaxTyping <> ren var
+R5888:5894 SyntaxTyping <> TermSet meth
+var 5939:5942 <> Term
+R5946:5956 SyntaxTyping <> TermAlgebra rec
+ind 6386:6388 <> Pos
+constr 6404:6406 <> pos
+ind 6464:6471 <> TermTree
+constr 6502:6507 <> tleafP
+constr 6545:6550 <> tleafN
+constr 6588:6593 <> tdummy
+constr 6619:6623 <> tnode
+constr 6698:6703 <> tqnode
+ind 6767:6769 <> Neg
+constr 6790:6792 <> rei
+ind 6879:6891 <> OptionCommand
+constr 6913:6916 <> some
+constr 6954:6957 <> none
+ind 6964:6970 <> Command
+constr 6993:6995 <> cut
+constr 7031:7036 <> select
+R6478:6482 SyntaxTyping <> sTree ind
+R6418:6425 SyntaxTyping <> Patterns defax
+R6455:6457 SyntaxTyping <> Pos ind
+R6429:6436 SyntaxTyping <> TermTree ind
+R6441:6447 SyntaxTyping <> PatTree defax
+R6449:6449 SyntaxTyping <> p var
+R6522:6529 SyntaxTyping <> TermTree ind
+R6531:6536 SyntaxTyping <> sleafP constr
+R6513:6516 SyntaxTyping <> PVar proj
+R6565:6572 SyntaxTyping <> TermTree ind
+R6574:6579 SyntaxTyping <> sleafN constr
+R6555:6557 SyntaxTyping <> Neg ind
+R6596:6603 SyntaxTyping <> TermTree ind
+R6605:6610 SyntaxTyping <> sdummy constr
+R6668:6675 SyntaxTyping <> TermTree ind
+R6678:6682 SyntaxTyping <> snode constr
+R6687:6688 SyntaxTyping <> s2 var
+R6684:6685 SyntaxTyping <> s1 var
+R6651:6658 SyntaxTyping <> TermTree ind
+R6662:6663 SyntaxTyping <> s2 var
+R6633:6640 SyntaxTyping <> TermTree ind
+R6644:6645 SyntaxTyping <> s1 var
+R6742:6749 SyntaxTyping <> TermTree ind
+R6752:6757 SyntaxTyping <> sqnode constr
+R6759:6759 SyntaxTyping <> s var
+R6726:6733 SyntaxTyping <> TermTree ind
+R6737:6737 SyntaxTyping <> s var
+R6708:6711 SyntaxTyping <> Term defax
+R6716:6719 SyntaxTyping <> QVar proj
+R6870:6872 SyntaxTyping <> Neg ind
+R6806:6813 SyntaxTyping <> Patterns defax
+R6817:6829 SyntaxTyping <> OptionCommand ind
+R6841:6848 SyntaxTyping <> wextends proj
+R6852:6858 SyntaxTyping <> PatTree defax
+R6860:6860 SyntaxTyping <> p var
+R6832:6838 SyntaxTyping <> Context defax
+R6933:6945 SyntaxTyping <> OptionCommand ind
+R6920:6926 SyntaxTyping <> Command ind
+R6958:6958 SyntaxTyping <> OptionCommand ind
+R7016:7022 SyntaxTyping <> Command ind
+R7009:7011 SyntaxTyping <> Pos ind
+R7001:7003 SyntaxTyping <> Neg ind
+R7058:7064 SyntaxTyping <> Command ind
+R7051:7053 SyntaxTyping <> Pos ind
+R7042:7045 SyntaxTyping <> NVar proj
+R7078:7082 SyntaxTyping <> tnode constr
+R7078:7082 SyntaxTyping <> tnode constr
+R7110:7115 SyntaxTyping <> tqnode constr
+R7110:7115 SyntaxTyping <> tqnode constr
+def 7138:7144 <> pos_ind
+R7165:7167 SyntaxTyping <> Pos ind
+def 7186:7197 <> termtree_ind
+R7218:7225 SyntaxTyping <> TermTree ind
+def 7244:7250 <> neg_ind
+R7273:7275 SyntaxTyping <> Neg ind
+def 7296:7307 <> ocommand_ind
+R7332:7344 SyntaxTyping <> OptionCommand ind
+def 7367:7377 <> command_ind
+R7404:7410 SyntaxTyping <> Command ind
+def 7440:7447 <> term_ind
+R7454:7460 SyntaxTyping <> pos_ind scheme
+R7463:7474 SyntaxTyping <> termtree_ind scheme
+R7477:7483 SyntaxTyping <> neg_ind scheme
+R7486:7497 SyntaxTyping <> ocommand_ind scheme
+R7500:7510 SyntaxTyping <> command_ind scheme
+def 7587:7595 <> Reifiable
+R7613:7620 SyntaxTyping <> Patterns defax
+R7624:7636 SyntaxTyping <> OptionCommand ind
+R7648:7655 SyntaxTyping <> wextends proj
+R7670:7670 SyntaxTyping <> w var
+R7659:7665 SyntaxTyping <> PatTree defax
+R7667:7667 SyntaxTyping <> p var
+R7639:7645 SyntaxTyping <> Context defax
+R7696:7698 Coq.Init.Datatypes <> sum ind
+not 7684 <> ::x_'+'_x
+def 7717:7722 <> NegVar
+R7735:7737 SyntaxTyping <> ::x_'+'_x not
+R7730:7732 SyntaxTyping <> Neg ind
+R7734:7734 SyntaxTyping <> w var
+R7741:7744 SyntaxTyping <> NVar proj
+R7738:7738 SyntaxTyping <> w var
+R7771:7774 Coq.Init.Datatypes <> prod ind
+not 7758 <> :type_scope:x_'£'_x
+ind 7841:7850 <> cexists_as
+constr 7902:7909 <> cnotnone
+R7879:7885 SyntaxTyping <> Command ind
+R7859:7871 SyntaxTyping <> OptionCommand ind
+R7922:7931 SyntaxTyping <> cexists_as ind
+R7942:7942 SyntaxTyping <> o var
+R7934:7937 SyntaxTyping <> some constr
+R7939:7939 SyntaxTyping <> o var
+R7972:7981 SyntaxTyping <> cexists_as ind
+not 7956 <> ::x_'=cis='_x
+prf 8031:8037 <> somecis
+R8052:8058 SyntaxTyping <> Command ind
+R8060:8060 SyntaxTyping <> w var
+R8079:8081 Coq.Init.Logic <> :type_scope:x_'='_x not
+R8078:8078 SyntaxTyping <> u var
+R8082:8085 SyntaxTyping <> some constr
+R8087:8087 SyntaxTyping <> c var
+R8066:8072 SyntaxTyping <> ::x_'=cis='_x not
+R8065:8065 SyntaxTyping <> u var
+R8073:8073 SyntaxTyping <> c var
+var 8290:8294 <> Sorts
+var 8313:8322 <> SortingRel
+R8372:8376 SyntaxTyping <> Sorts defax
+R8359:8362 SyntaxTyping <> Term defax
+R8364:8367 SyntaxTyping <> QVar var
+R8349:8353 SyntaxTyping <> Sorts defax
+R8341:8344 SyntaxTyping <> QVar var
+var 8398:8406 <> SortedVar
+R8433:8436 SyntaxTyping <> QVar var
+R8440:8449 SyntaxTyping <> SortingRel defax
+R8478:8482 SyntaxTyping <> Sigma var
+R8484:8485 SyntaxTyping <> xq var
+R8464:8470 SyntaxTyping <> varTerm proj
+R8473:8474 SyntaxTyping <> xq var
+R8458:8461 SyntaxTyping <> Term defax
+R8451:8455 SyntaxTyping <> Sigma var
+ind 8658:8665 <> TermList
+constr 8720:8726 <> TermNil
+constr 8747:8754 <> TermCons
+R8680:8684 SyntaxTyping <> Sorts defax
+R8675:8675 SyntaxTyping <> A var
+R8696:8699 Coq.Init.Datatypes <> list ind
+R8701:8705 SyntaxTyping <> Sorts defax
+R8730:8737 SyntaxTyping <> TermList ind
+R8741:8743 Coq.Init.Datatypes <> nil constr
+R8804:8811 SyntaxTyping <> TermList ind
+R8817:8818 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R8816:8816 SyntaxTyping <> s var
+R8819:8819 SyntaxTyping <> l var
+R8788:8795 SyntaxTyping <> TermList ind
+R8799:8799 SyntaxTyping <> l var
+R8773:8773 SyntaxTyping <> s var
+R8771:8771 SyntaxTyping <> r var
+R8834:8840 SyntaxTyping <> TermNil constr
+R8834:8840 SyntaxTyping <> TermNil constr
+R8859:8866 SyntaxTyping <> TermCons constr
+R8859:8866 SyntaxTyping <> TermCons constr
+def 8902:8911 <> UTTermList
+R8917:8920 Coq.Init.Datatypes <> list ind
+R8922:8926 SyntaxTyping <> Sorts defax
+R8942:8949 SyntaxTyping <> TermList ind
+R8965:8968 Coq.Init.Logic <> True ind
+R8951:8951 SyntaxTyping <> A var
+def 8984:8992 <> TTermList
+R9016:9020 SyntaxTyping <> Sorts defax
+R9008:9011 SyntaxTyping <> QVar var
+R9024:9027 Coq.Init.Datatypes <> list ind
+R9029:9033 SyntaxTyping <> Sorts defax
+R9048:9055 SyntaxTyping <> TermList ind
+R9058:9067 SyntaxTyping <> SortingRel defax
+R9069:9073 SyntaxTyping <> Sigma var
+def 9087:9097 <> TermListMap
+R9119:9127 SyntaxTyping <> TTermList def
+R9140:9140 SyntaxTyping <> l var
+R9134:9138 SyntaxTyping <> Sigma var
+R9129:9132 SyntaxTyping <> QVar var
+R9144:9153 SyntaxTyping <> UTTermList def
+R9167:9167 SyntaxTyping <> l var
+R9156:9159 SyntaxTyping <> Term defax
+R9161:9164 SyntaxTyping <> QVar var
+R9180:9181 SyntaxTyping <> tl var
+R9196:9202 SyntaxTyping <> TermNil constr
+R9207:9213 SyntaxTyping <> TermNil constr
+R9223:9230 SyntaxTyping <> TermCons constr
+R9247:9254 SyntaxTyping <> TermCons constr
+R9269:9279 SyntaxTyping <> TermListMap def
+R9259:9265 Coq.Init.Logic <> I constr
+var 9301:9304 <> Atom
+var 9306:9313 <> Molecule
+R9316:9319 Coq.Init.Datatypes <> list ind
+R9321:9325 SyntaxTyping <> Sorts defax
+ind 9347:9354 <> TypeTree
+constr 9391:9396 <> TleafP
+constr 9440:9445 <> TleafN
+constr 9493:9498 <> Tdummy
+constr 9532:9536 <> Tnode
+constr 9618:9623 <> Tqnode
+R9366:9369 Coq.Init.Datatypes <> list ind
+R9371:9375 SyntaxTyping <> Sorts defax
+R9357:9361 SyntaxTyping <> sTree ind
+R9420:9427 SyntaxTyping <> TypeTree ind
+R9436:9436 SyntaxTyping <> l var
+R9429:9434 SyntaxTyping <> sleafP constr
+R9410:9413 SyntaxTyping <> Atom defax
+R9415:9415 SyntaxTyping <> l var
+R9473:9480 SyntaxTyping <> TypeTree ind
+R9489:9489 SyntaxTyping <> l var
+R9482:9487 SyntaxTyping <> sleafN constr
+R9459:9466 SyntaxTyping <> Molecule defax
+R9468:9468 SyntaxTyping <> l var
+R9512:9519 SyntaxTyping <> TypeTree ind
+R9528:9528 SyntaxTyping <> l var
+R9521:9526 SyntaxTyping <> sdummy constr
+R9591:9598 SyntaxTyping <> TypeTree ind
+R9614:9614 SyntaxTyping <> l var
+R9601:9605 SyntaxTyping <> snode constr
+R9610:9611 SyntaxTyping <> s2 var
+R9607:9608 SyntaxTyping <> s1 var
+R9574:9581 SyntaxTyping <> TypeTree ind
+R9586:9586 SyntaxTyping <> l var
+R9583:9584 SyntaxTyping <> s2 var
+R9557:9564 SyntaxTyping <> TypeTree ind
+R9569:9569 SyntaxTyping <> l var
+R9566:9567 SyntaxTyping <> s1 var
+R9664:9671 SyntaxTyping <> TypeTree ind
+R9684:9684 SyntaxTyping <> l var
+R9674:9679 SyntaxTyping <> sqnode constr
+R9681:9681 SyntaxTyping <> s var
+R9642:9649 SyntaxTyping <> TypeTree ind
+R9656:9657 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R9654:9655 SyntaxTyping <> so var
+R9658:9658 SyntaxTyping <> l var
+R9651:9651 SyntaxTyping <> s var
+R9698:9703 SyntaxTyping <> TleafP constr
+R9698:9703 SyntaxTyping <> TleafP constr
+R9722:9727 SyntaxTyping <> TleafN constr
+R9722:9727 SyntaxTyping <> TleafN constr
+R9746:9751 SyntaxTyping <> Tdummy constr
+R9746:9751 SyntaxTyping <> Tdummy constr
+R9768:9772 SyntaxTyping <> Tnode constr
+R9768:9772 SyntaxTyping <> Tnode constr
+R9799:9804 SyntaxTyping <> Tqnode constr
+R9799:9804 SyntaxTyping <> Tqnode constr
+def 9829:9833 <> DPair
+R9840:9840 Coq.Init.Specif <> :type_scope:'{'_x_':'_x_'&'_x_'}' not
+R9842:9843 Coq.Init.Specif <> :type_scope:'{'_x_':'_x_'&'_x_'}' not
+R9854:9856 Coq.Init.Specif <> :type_scope:'{'_x_':'_x_'&'_x_'}' not
+R9860:9860 Coq.Init.Specif <> :type_scope:'{'_x_':'_x_'&'_x_'}' not
+R9857:9857 SyntaxTyping <> A var
+R9844:9847 Coq.Init.Datatypes <> list ind
+R9849:9853 SyntaxTyping <> Sorts defax
+def 9875:9877 <> ex1
+R9886:9890 SyntaxTyping <> DPair def
+R9892:9892 SyntaxTyping <> A var
+R9907:9907 SyntaxTyping <> a var
+def 9955:9957 <> ex2
+R9966:9970 SyntaxTyping <> DPair def
+R9972:9972 SyntaxTyping <> A var
+R9976:9976 SyntaxTyping <> A var
+R9979:9981 SyntaxTyping <> ex1 def
+R9983:9983 SyntaxTyping <> a var
+R9998:9998 SyntaxTyping <> a var
+def 10053:10055 <> Par
+R10067:10071 SyntaxTyping <> DPair def
+R10086:10089 SyntaxTyping <> :type_scope:x_'£'_x not
+R10083:10083 SyntaxTyping <> A var
+R10085:10085 SyntaxTyping <> l var
+R10090:10099 SyntaxTyping <> UTTermList def
+R10113:10113 SyntaxTyping <> l var
+R10102:10105 SyntaxTyping <> Term defax
+R10107:10110 SyntaxTyping <> qVar var
+R10142:10147 Coq.Init.Specif <> existS syndef
+R10191:10191 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R10193:10193 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R10195:10195 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R10162:10165 SyntaxTyping <> :type_scope:x_'£'_x not
+R10161:10161 SyntaxTyping <> l var
+R10166:10175 SyntaxTyping <> UTTermList def
+R10186:10186 SyntaxTyping <> l var
+R10178:10181 SyntaxTyping <> Term defax
+not 10126 <> ::'['_x_','_x_']'
+def 10211:10214 <> getA
+R10228:10230 SyntaxTyping <> Par def
+R10234:10237 SyntaxTyping <> qVar var
+R10232:10232 SyntaxTyping <> A var
+R10259:10261 SyntaxTyping <> ex2 def
+R10263:10263 SyntaxTyping <> a var
+R10268:10268 SyntaxTyping <> b var
+def 10283:10290 <> getTerms
+R10304:10306 SyntaxTyping <> Par def
+R10310:10313 SyntaxTyping <> qVar var
+R10308:10308 SyntaxTyping <> A var
+R10335:10337 SyntaxTyping <> ex2 def
+R10339:10339 SyntaxTyping <> a var
+R10344:10344 SyntaxTyping <> b var
+def 10359:10371 <> namedTypeTree
+R10403:10412 SyntaxTyping <> UTTermList def
+R10426:10427 SyntaxTyping <> ls var
+R10415:10418 SyntaxTyping <> Term defax
+R10420:10423 SyntaxTyping <> qVar var
+R10448:10455 SyntaxTyping <> TypeTree ind
+R10460:10461 SyntaxTyping <> ls var
+R10457:10458 SyntaxTyping <> st var
+R10483:10486 SyntaxTyping <> Tree ind
+R10503:10504 SyntaxTyping <> st var
+R10498:10501 Coq.Init.Datatypes <> unit ind
+R10493:10496 Coq.Init.Datatypes <> unit ind
+R10488:10491 SyntaxTyping <> qVar var
+R10510:10513 SyntaxTyping <> Tree ind
+R10557:10558 SyntaxTyping <> st var
+R10538:10540 SyntaxTyping <> Par def
+R10551:10554 SyntaxTyping <> qVar var
+R10542:10549 SyntaxTyping <> Molecule defax
+R10522:10524 SyntaxTyping <> Par def
+R10531:10534 SyntaxTyping <> qVar var
+R10526:10529 SyntaxTyping <> Atom defax
+R10515:10519 SyntaxTyping <> Sorts defax
+R10666:10670 SyntaxTyping <> leafP constr
+R10672:10672 SyntaxTyping <> ::'['_x_','_x_']' not
+R10674:10674 SyntaxTyping <> ::'['_x_','_x_']' not
+R10677:10677 SyntaxTyping <> ::'['_x_','_x_']' not
+R10666:10670 SyntaxTyping <> leafP constr
+R10672:10672 SyntaxTyping <> ::'['_x_','_x_']' not
+R10674:10674 SyntaxTyping <> ::'['_x_','_x_']' not
+R10677:10677 SyntaxTyping <> ::'['_x_','_x_']' not
+R10691:10695 SyntaxTyping <> leafN constr
+R10697:10697 SyntaxTyping <> ::'['_x_','_x_']' not
+R10699:10699 SyntaxTyping <> ::'['_x_','_x_']' not
+R10702:10702 SyntaxTyping <> ::'['_x_','_x_']' not
+R10691:10695 SyntaxTyping <> leafN constr
+R10697:10697 SyntaxTyping <> ::'['_x_','_x_']' not
+R10699:10699 SyntaxTyping <> ::'['_x_','_x_']' not
+R10702:10702 SyntaxTyping <> ::'['_x_','_x_']' not
+R10716:10720 SyntaxTyping <> dummy constr
+R10716:10720 SyntaxTyping <> dummy constr
+R10733:10736 SyntaxTyping <> node constr
+R10733:10736 SyntaxTyping <> node constr
+R10788:10792 SyntaxTyping <> qnode constr
+R10816:10823 SyntaxTyping <> TermCons constr
+R10846:10852 Coq.Init.Logic <> I constr
+R10832:10838 SyntaxTyping <> varTerm proj
+R10826:10829 SyntaxTyping <> Term defax
+R10809:10810 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+R10788:10792 SyntaxTyping <> qnode constr
+R10816:10823 SyntaxTyping <> TermCons constr
+R10846:10852 Coq.Init.Logic <> I constr
+R10832:10838 SyntaxTyping <> varTerm proj
+R10826:10829 SyntaxTyping <> Term defax
+R10809:10810 Coq.Init.Datatypes <> :list_scope:x_'::'_x not
+var 11175:11187 <> PatternsTyped
+R11202:11209 SyntaxTyping <> Patterns defax
+R11243:11250 SyntaxTyping <> Molecule defax
+R11252:11252 SyntaxTyping <> l var
+R11217:11224 SyntaxTyping <> TypeTree ind
+R11238:11238 SyntaxTyping <> l var
+R11227:11233 SyntaxTyping <> PatTree defax
+R11235:11235 SyntaxTyping <> p var
+def 11366:11373 <> TContext
+R11381:11388 SyntaxTyping <> ContType rec
+R11543:11543 SyntaxTyping <> w var
+R11486:11488 SyntaxTyping <> Par def
+R11502:11505 SyntaxTyping <> QVar proj
+R11499:11499 SyntaxTyping <> w var
+R11490:11497 SyntaxTyping <> Molecule defax
+R11432:11434 SyntaxTyping <> Par def
+R11444:11447 SyntaxTyping <> QVar proj
+R11441:11441 SyntaxTyping <> w var
+R11436:11439 SyntaxTyping <> Atom defax
+R11390:11394 SyntaxTyping <> Sorts defax
+def 11556:11568 <> UTTermListRen
+R11598:11602 SyntaxTyping <> qVar' var
+R11590:11593 SyntaxTyping <> qVar var
+R11609:11618 SyntaxTyping <> UTTermList def
+R11632:11632 SyntaxTyping <> l var
+R11621:11624 SyntaxTyping <> Term defax
+R11626:11629 SyntaxTyping <> qVar var
+R11637:11646 SyntaxTyping <> UTTermList def
+R11661:11661 SyntaxTyping <> l var
+R11649:11652 SyntaxTyping <> Term defax
+R11654:11658 SyntaxTyping <> qVar' var
+R11674:11675 SyntaxTyping <> tl var
+R11690:11696 SyntaxTyping <> TermNil constr
+R11701:11707 SyntaxTyping <> TermNil constr
+R11717:11724 SyntaxTyping <> TermCons constr
+R11741:11748 SyntaxTyping <> TermCons constr
+R11865:11877 SyntaxTyping <> UTTermListRen def
+R11879:11881 SyntaxTyping <> ren var
+R11814:11820 Coq.Init.Logic <> I constr
+R11757:11763 SyntaxTyping <> qrename proj
+R11766:11768 SyntaxTyping <> ren var
+R11751:11754 SyntaxTyping <> Term defax
+def 11907:11912 <> ParRen
+R11942:11946 SyntaxTyping <> qVar' var
+R11934:11937 SyntaxTyping <> qVar var
+R11952:11954 SyntaxTyping <> Par def
+R11958:11961 SyntaxTyping <> qVar var
+R11956:11956 SyntaxTyping <> A var
+R11975:11975 SyntaxTyping <> x var
+R11997:11997 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11999:11999 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R12002:12002 Coq.Init.Datatypes <> :core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R12007:12007 SyntaxTyping <> ::'['_x_','_x_']' not
+R12009:12009 SyntaxTyping <> ::'['_x_','_x_']' not
+R12030:12030 SyntaxTyping <> ::'['_x_','_x_']' not
+R12010:12022 SyntaxTyping <> UTTermListRen def
+R12024:12026 SyntaxTyping <> ren var
+def 12051:12058 <> Textends
+R12085:12094 SyntaxTyping <> UTTermList def
+R12112:12112 SyntaxTyping <> l var
+R12097:12100 SyntaxTyping <> Term defax
+R12105:12108 SyntaxTyping <> QVar proj
+R12102:12102 SyntaxTyping <> w var
+R12129:12135 SyntaxTyping <> extends proj
+R12346:12352 SyntaxTyping <> Contmap def
+R12568:12572 SyntaxTyping <> Gamma var
+R12360:12360 SyntaxTyping <> w var
+R12504:12509 SyntaxTyping <> ParRen def
+R12521:12527 SyntaxTyping <> qinject proj
+R12533:12533 SyntaxTyping <> w var
+R12530:12531 SyntaxTyping <> st var
+R12512:12518 SyntaxTyping <> Context defax
+R12439:12444 SyntaxTyping <> ParRen def
+R12456:12462 SyntaxTyping <> qinject proj
+R12468:12468 SyntaxTyping <> w var
+R12465:12466 SyntaxTyping <> st var
+R12447:12453 SyntaxTyping <> Context defax
+R12404:12404 SyntaxTyping <> i var
+R12139:12151 SyntaxTyping <> namedTypeTree def
+R12287:12290 SyntaxTyping <> qnew proj
+R12296:12296 SyntaxTyping <> w var
+R12293:12294 SyntaxTyping <> st var
+R12278:12284 SyntaxTyping <> Context defax
+R12234:12238 SyntaxTyping <> Delta var
+R12154:12166 SyntaxTyping <> UTTermListRen def
+R12193:12194 SyntaxTyping <> tl var
+R12178:12184 SyntaxTyping <> qinject proj
+R12190:12190 SyntaxTyping <> w var
+R12187:12188 SyntaxTyping <> st var
+R12169:12175 SyntaxTyping <> Context defax
+R12120:12126 SyntaxTyping <> Context defax
+var 12644:12648 <> is_eq
+R12681:12683 SyntaxTyping <> Par def
+R12690:12690 SyntaxTyping <> l var
+R12685:12688 SyntaxTyping <> Atom defax
+R12665:12667 SyntaxTyping <> Par def
+R12674:12674 SyntaxTyping <> l var
+R12669:12672 SyntaxTyping <> Atom defax
+ind 12713:12721 <> TypingPos
+constr 12793:12801 <> typingpos
+ind 13011:13019 <> TypingSub
+constr 13149:13163 <> typingsub_leafl
+constr 13322:13336 <> typingsub_leafr
+constr 13489:13503 <> typingsub_dummy
+constr 13587:13600 <> typingsub_node
+constr 13902:13916 <> typingsub_qnode
+ind 14182:14190 <> TypingNeg
+constr 14268:14276 <> typingneg
+ind 14758:14776 <> TypingOptionCommand
+constr 14838:14849 <> typingoption
+ind 14974:14986 <> TypingCommand
+constr 15042:15050 <> typingcut
+constr 15216:15227 <> typingselect
+R12735:12742 SyntaxTyping <> TContext def
+R12744:12744 SyntaxTyping <> w var
+R12758:12760 SyntaxTyping <> Par def
+R12774:12777 SyntaxTyping <> QVar proj
+R12762:12769 SyntaxTyping <> Molecule defax
+R12749:12751 SyntaxTyping <> Pos ind
+R13102:13111 SyntaxTyping <> UTTermList def
+R13129:13129 SyntaxTyping <> l var
+R13114:13117 SyntaxTyping <> Term defax
+R13122:13125 SyntaxTyping <> QVar proj
+R13085:13092 SyntaxTyping <> TypeTree ind
+R13097:13097 SyntaxTyping <> l var
+R13094:13095 SyntaxTyping <> st var
+R13068:13075 SyntaxTyping <> TermTree ind
+R13079:13080 SyntaxTyping <> st var
+R14228:14230 SyntaxTyping <> Par def
+R14244:14247 SyntaxTyping <> QVar proj
+R14232:14239 SyntaxTyping <> Molecule defax
+R14219:14221 SyntaxTyping <> Neg ind
+R14804:14816 SyntaxTyping <> OptionCommand ind
+R15014:15020 SyntaxTyping <> Command ind
+R12945:12953 SyntaxTyping <> TypingPos ind
+R12971:12971 SyntaxTyping <> ::'['_x_','_x_']' not
+R12973:12973 SyntaxTyping <> ::'['_x_','_x_']' not
+R12976:12976 SyntaxTyping <> ::'['_x_','_x_']' not
+R12972:12972 SyntaxTyping <> A var
+R12974:12975 SyntaxTyping <> tl var
+R12962:12964 SyntaxTyping <> pos constr
+R12968:12968 SyntaxTyping <> v var
+R12966:12966 SyntaxTyping <> p var
+R12897:12905 SyntaxTyping <> TypingSub ind
+R12923:12924 SyntaxTyping <> tl var
+R12917:12921 SyntaxTyping <> Delta var
+R12915:12915 SyntaxTyping <> v var
+R12845:12857 SyntaxTyping <> PatternsTyped defax
+R12876:12876 SyntaxTyping <> A var
+R12870:12874 SyntaxTyping <> Delta var
+R12865:12865 SyntaxTyping <> l var
+R12868:12868 SyntaxTyping <> p var
+R13271:13279 SyntaxTyping <> TypingSub ind
+R13312:13313 SyntaxTyping <> tl var
+R13302:13307 SyntaxTyping <> TleafP constr
+R13309:13309 SyntaxTyping <> x var
+R13290:13295 SyntaxTyping <> tleafP constr
+R13297:13298 SyntaxTyping <> xp var
+R13287:13287 SyntaxTyping <> l var
+R13210:13214 SyntaxTyping <> is_eq defax
+R13235:13235 SyntaxTyping <> ::'['_x_','_x_']' not
+R13237:13237 SyntaxTyping <> ::'['_x_','_x_']' not
+R13240:13240 SyntaxTyping <> ::'['_x_','_x_']' not
+R13236:13236 SyntaxTyping <> x var
+R13238:13239 SyntaxTyping <> tl var
+R13224:13228 SyntaxTyping <> readp proj
+R13231:13232 SyntaxTyping <> xp var
+R13438:13446 SyntaxTyping <> TypingSub ind
+R13479:13480 SyntaxTyping <> l' var
+R13469:13474 SyntaxTyping <> TleafN constr
+R13476:13476 SyntaxTyping <> A var
+R13457:13462 SyntaxTyping <> tleafN constr
+R13464:13465 SyntaxTyping <> nt var
+R13454:13454 SyntaxTyping <> l var
+R13383:13391 SyntaxTyping <> TypingNeg ind
+R13402:13402 SyntaxTyping <> ::'['_x_','_x_']' not
+R13404:13404 SyntaxTyping <> ::'['_x_','_x_']' not
+R13407:13407 SyntaxTyping <> ::'['_x_','_x_']' not
+R13403:13403 SyntaxTyping <> A var
+R13405:13406 SyntaxTyping <> l' var
+R13399:13400 SyntaxTyping <> nt var
+R13545:13553 SyntaxTyping <> TypingSub ind
+R13577:13578 SyntaxTyping <> l' var
+R13570:13575 SyntaxTyping <> Tdummy constr
+R13563:13568 SyntaxTyping <> tdummy constr
+R13561:13561 SyntaxTyping <> l var
+R13622:13629 SyntaxTyping <> TermTree ind
+R13631:13632 SyntaxTyping <> s1 var
+R13639:13646 SyntaxTyping <> TermTree ind
+R13648:13649 SyntaxTyping <> s2 var
+R13838:13846 SyntaxTyping <> TypingSub ind
+R13892:13893 SyntaxTyping <> l' var
+R13871:13875 SyntaxTyping <> Tnode constr
+R13884:13889 SyntaxTyping <> Delta2 var
+R13877:13882 SyntaxTyping <> Delta1 var
+R13857:13861 SyntaxTyping <> tnode constr
+R13866:13867 SyntaxTyping <> v2 var
+R13863:13864 SyntaxTyping <> v1 var
+R13854:13854 SyntaxTyping <> l var
+R13779:13787 SyntaxTyping <> TypingSub ind
+R13807:13808 SyntaxTyping <> l' var
+R13800:13805 SyntaxTyping <> Delta2 var
+R13797:13798 SyntaxTyping <> v2 var
+R13720:13728 SyntaxTyping <> TypingSub ind
+R13748:13749 SyntaxTyping <> l' var
+R13741:13746 SyntaxTyping <> Delta1 var
+R13738:13739 SyntaxTyping <> v1 var
+R13933:13940 SyntaxTyping <> TermTree ind
+R13942:13942 SyntaxTyping <> s var
+R14124:14132 SyntaxTyping <> TypingSub ind
+R14173:14174 SyntaxTyping <> l' var
+R14156:14161 SyntaxTyping <> Tqnode constr
+R14166:14170 SyntaxTyping <> Delta var
+R14163:14164 SyntaxTyping <> so var
+R14143:14148 SyntaxTyping <> tqnode constr
+R14152:14152 SyntaxTyping <> v var
+R14150:14150 SyntaxTyping <> r var
+R14140:14140 SyntaxTyping <> l var
+R14045:14053 SyntaxTyping <> TypingSub ind
+R14072:14079 SyntaxTyping <> TermCons constr
+R14091:14092 SyntaxTyping <> l' var
+R14083:14089 Coq.Init.Logic <> I constr
+R14081:14081 SyntaxTyping <> r var
+R14065:14069 SyntaxTyping <> Delta var
+R14063:14063 SyntaxTyping <> v var
+R13986:13995 SyntaxTyping <> SortingRel defax
+R14013:14014 SyntaxTyping <> so var
+R14011:14011 SyntaxTyping <> r var
+R14004:14008 SyntaxTyping <> readq proj
+R14721:14729 SyntaxTyping <> TypingNeg ind
+R14745:14745 SyntaxTyping <> ::'['_x_','_x_']' not
+R14747:14747 SyntaxTyping <> ::'['_x_','_x_']' not
+R14750:14750 SyntaxTyping <> ::'['_x_','_x_']' not
+R14746:14746 SyntaxTyping <> A var
+R14748:14749 SyntaxTyping <> tl var
+R14738:14740 SyntaxTyping <> rei constr
+R14742:14742 SyntaxTyping <> f var
+R14503:14521 SyntaxTyping <> TypingOptionCommand ind
+R14692:14692 SyntaxTyping <> f var
+R14694:14694 SyntaxTyping <> p var
+R14624:14631 SyntaxTyping <> Textends def
+R14654:14655 SyntaxTyping <> tl var
+R14642:14646 SyntaxTyping <> Delta var
+R14639:14639 SyntaxTyping <> l var
+R14566:14573 SyntaxTyping <> wextends proj
+R14577:14583 SyntaxTyping <> PatTree defax
+R14585:14585 SyntaxTyping <> p var
+R14557:14563 SyntaxTyping <> Context defax
+R14446:14458 SyntaxTyping <> PatternsTyped defax
+R14468:14468 SyntaxTyping <> A var
+R14462:14466 SyntaxTyping <> Delta var
+R14460:14460 SyntaxTyping <> p var
+R14346:14352 Coq.Init.Logic <> :type_scope:'exists'_x_'..'_x_','_x not
+R14358:14359 Coq.Init.Logic <> :type_scope:'exists'_x_'..'_x_','_x not
+R14360:14372 SyntaxTyping <> PatternsTyped defax
+R14382:14382 SyntaxTyping <> A var
+R14376:14380 SyntaxTyping <> Delta var
+R14374:14374 SyntaxTyping <> p var
+R14329:14329 SyntaxTyping <> ::x_'=cis='_x not
+R14333:14340 SyntaxTyping <> ::x_'=cis='_x not
+R14330:14330 SyntaxTyping <> f var
+R14332:14332 SyntaxTyping <> p var
+R14341:14341 SyntaxTyping <> c var
+R14933:14951 SyntaxTyping <> TypingOptionCommand ind
+R14960:14963 SyntaxTyping <> some constr
+R14965:14965 SyntaxTyping <> c var
+R14885:14897 SyntaxTyping <> TypingCommand ind
+R14905:14905 SyntaxTyping <> c var
+R15177:15189 SyntaxTyping <> TypingCommand ind
+R15198:15200 SyntaxTyping <> cut constr
+R15205:15206 SyntaxTyping <> pt var
+R15202:15203 SyntaxTyping <> nt var
+R15133:15141 SyntaxTyping <> TypingPos ind
+R15152:15152 SyntaxTyping <> A var
+R15149:15150 SyntaxTyping <> pt var
+R15089:15097 SyntaxTyping <> TypingNeg ind
+R15108:15108 SyntaxTyping <> A var
+R15105:15106 SyntaxTyping <> nt var
+R15331:15343 SyntaxTyping <> TypingCommand ind
+R15352:15357 SyntaxTyping <> select constr
+R15362:15363 SyntaxTyping <> pt var
+R15359:15360 SyntaxTyping <> xn var
+R15267:15275 SyntaxTyping <> TypingPos ind
+R15294:15298 SyntaxTyping <> readn proj
+R15301:15302 SyntaxTyping <> xn var
+R15283:15284 SyntaxTyping <> pt var
+R15436:15444 SyntaxTyping <> TypingSub ind
+R15436:15444 SyntaxTyping <> TypingSub ind
+def 15479:15491 <> typingPos_ind
+R15513:15521 SyntaxTyping <> TypingPos ind
+def 15540:15552 <> typingSub_ind
+R15574:15582 SyntaxTyping <> TypingSub ind
+def 15601:15613 <> typingNeg_ind
+R15637:15645 SyntaxTyping <> TypingNeg ind
+def 15666:15688 <> typingOptionCommand_ind
+R15714:15732 SyntaxTyping <> TypingOptionCommand ind
+def 15755:15771 <> typingCommand_ind
+R15790:15802 SyntaxTyping <> TypingCommand ind
+def 15833:15842 <> typing_ind
+R15849:15861 SyntaxTyping <> typingPos_ind scheme
+R15864:15876 SyntaxTyping <> typingSub_ind scheme
+R15879:15891 SyntaxTyping <> typingNeg_ind scheme
+R15894:15916 SyntaxTyping <> typingOptionCommand_ind scheme
+R15919:15935 SyntaxTyping <> typingCommand_ind scheme
+R15957:15966 SyntaxTyping <> typing_ind scheme
