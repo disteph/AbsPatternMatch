@@ -490,8 +490,7 @@ orthogonality relation be closed "under anti-reduction" *)
         forall (f: Reifiable) (rho: SContext M0 w) (p: Patterns) (v: SemTree (PatTree p)) c,
           treevalue v
           -> f p =cis= c
-          -> M0.(orth) (@SemC M0 (Context.(wextends) (PatTree p) w) 
-                             (Context.(extends) v rho) c)
+          -> M0.(orth) (SemC M0 (Context.(extends) v rho) c)
           -> M0.(orth) (M0.(I) rho f, M0.(tild) p v)
     }.
 
