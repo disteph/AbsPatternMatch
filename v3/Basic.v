@@ -9,6 +9,4 @@ Proof.
 Qed.
 Arguments elim2 {U P p x y} _.
 
-Notation "x £ y" := (prod x y) (at level 80, right associativity) : type_scope.
-
 Print Assumptions elim2.

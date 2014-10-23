@@ -1,4 +1,4 @@
-DIGEST 60cde9ac5ad53c38bc2c7e7dcd91de55
+DIGEST f84ccc8716503ce0ae36f291c225f1c2
 FBasic
 R15:34 Coq.Program.Equality <> <> lib
 R65:70 Coq.Init.Specif <> existS syndef
@@ -26,4 +26,6 @@ R209:217 Coq.Logic.ProofIrrelevance ProofIrrelevanceTheory.EqdepTheory inj_pair2
 R209:217 Coq.Logic.ProofIrrelevance ProofIrrelevanceTheory.EqdepTheory inj_pair2 thm
 R235:239 Basic <> elim2 thm
 R235:239 Basic <> elim2 thm
-R275:279 Basic <> elim2 thm
+R279:282 Coq.Init.Datatypes <> prod ind
+not 266 <> :type_scope:x_'£'_x
+R357:361 Basic <> elim2 thm
