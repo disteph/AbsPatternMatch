@@ -1,6 +1,7 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
 Set Maximal Implicit Insertion. 
+(* Unset Printing Implicit Defensive. *)
 Open Scope type_scope.
 
 Require Import ssreflect List Basic.
@@ -21,13 +22,12 @@ Section QuantifyingStructure.
 
   (* We now assume we have a quantifying structure *)
 
-  Variable QS: QuantifyingStructures.
+  Variable QS:QuantifyingStructures.
 
   (**************************************)
   (* Useful definitions for types       *)
   (* (types are parameterised by terms) *)
   (**************************************)
-
 
   Inductive AList A : list QS.(Sorts) -> Type :=
   | TermNil   : AList A nil
@@ -113,12 +113,12 @@ Section LAF.
   Record QSTypes :=
     {
       QS :> QuantifyingStructures;
-      Atom        : list QS.(Sorts) -> Type;
-      Molecule    : list QS.(Sorts) -> Type;
+      Atom        : list QS.(@Sorts) -> Type;
+      Molecule    : list QS.(@Sorts) -> Type;
       is_eq {qLab}: (Inst Atom qLab) -> (Inst Atom qLab) -> Prop
     }.
 
-  Inductive TypingDec (QST: QSTypes): DecStruct -> list QST.(Sorts) -> Type  :=
+  Inductive TypingDec (QST: QSTypes): DecStruct -> list QST.(@Sorts) -> Type  :=
   | TleafP : forall {l}, Atom l -> TypingDec sleafP l
   | TleafN : forall {l}, Molecule l -> TypingDec sleafN l
   | Tdummy : forall {l}, TypingDec sdummy l

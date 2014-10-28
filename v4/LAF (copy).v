@@ -1,7 +1,9 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
-Set Maximal Implicit Insertion. 
+Set Maximal Implicit Insertion.
+(* Unset Printing Implicit Defensive. *)
 Open Scope type_scope.
+Generalizable All Variables.
 
 Require Import ssreflect List Basic.
 
@@ -10,32 +12,44 @@ Section QuantifyingStructure.
   (* Quantifying Structure *)
   (*************************)
 
-  Record QuantifyingStructures := 
-    {
-      Sorts : Type;
-      QWorld: Type;
-      Terms : QWorld -> Type;
-      SoContexts: QWorld -> Type;
-      SortingRel qLab : SoContexts qLab -> Terms qLab -> Sorts -> Prop
-    }.
+  Class QuantifyingStructures 
+        (Sorts QWorld: Type) (Terms SoContexts: QWorld -> Type) 
+        {SortingRel: forall {qLab}, SoContexts qLab -> Terms qLab -> Sorts -> Prop}
+    := {QWorld := QWorld; Sorts := Sorts; 
+       Terms := Terms; SoContexts := SoContexts; 
+       SortingRel := @SortingRel}.
+
+  Definition comp {A B C} (g:B -> C) (f:A -> B) x := g(f x).
+
+  Class QuantifyingStructureswE
+         `(QS:QuantifyingStructures (Sorts := So)
+                                    (QWorld := Type)
+                                    (SoContexts := fun qLab => qLab -> So))
+        (asT : forall {qLab}, qLab -> Terms qLab)
+        (lift2Terms: forall {qLab qLab'}, (qLab -> qLab') -> Terms qLab -> Terms qLab')
+        (qLabSorting: 
+          forall {qLab} Sigma (xq:qLab) s, SortingRel Sigma (asT xq) s <-> s = Sigma xq)
+        (renSorting: forall {qLab qLab'} (pi:qLab -> qLab') (Sigma : SoContexts qLab') (r: Terms qLab) s, 
+            SortingRel (QuantifyingStructures := QS) (comp Sigma pi) r s
+            -> SortingRel Sigma (lift2Terms pi r) s)
+    := { asT := @asT; lift2Terms := @lift2Terms; qLabSorting := @qLabSorting; renSorting := @renSorting }.
 
   (* We now assume we have a quantifying structure *)
 
-  Variable QS: QuantifyingStructures.
+  Context `(QS:QuantifyingStructures).
 
   (**************************************)
   (* Useful definitions for types       *)
   (* (types are parameterised by terms) *)
   (**************************************)
 
-
-  Inductive AList A : list QS.(Sorts) -> Type :=
+  Inductive AList A : list Sorts -> Type :=
   | TermNil   : AList A nil
   | TermCons s: A -> forall l, AList A l -> AList A (s::l).
 
-  Definition TList (qLab:QS.(QWorld)) := AList (Terms qLab).
+  Definition TList (qLab:QWorld) := AList (Terms qLab).
 
-  Definition DPair A := {l: list QS.(Sorts) & A l}.
+  Definition DPair A := {l: list Sorts & A l}.
 
   Definition ex1 A (a:DPair A) := 
     match a with
@@ -47,7 +61,7 @@ Section QuantifyingStructure.
       | existS _ araw => araw
     end.
 
-  Definition Inst A (qLab:QS.(QWorld)) := DPair (fun l => A l * TList qLab l).
+  Definition Inst A (qLab:QWorld) := DPair (fun l => A l * TList qLab l).
 
   Definition getA     A qLab (a:Inst A qLab) := let (b,_) := ex2 a in b.
   Definition getTerms A qLab (a:Inst A qLab) := let (_,b) := ex2 a in b.
@@ -98,7 +112,6 @@ Proof.
   exact ((RelQ X X1)/\(IHst X0 X2)).
 Defined.
 
-
 Section LAF.
 
   (*********)
@@ -110,15 +123,15 @@ Section LAF.
 - Atom:     type of atoms
 - Molecule: type of molecules *)
 
-  Record QSTypes :=
-    {
-      QS :> QuantifyingStructures;
-      Atom        : list QS.(Sorts) -> Type;
-      Molecule    : list QS.(Sorts) -> Type;
-      is_eq {qLab}: (Inst Atom qLab) -> (Inst Atom qLab) -> Prop
-    }.
+  Class QSTypes
+         `(QS:QuantifyingStructures)
+         (Atom : list Sorts -> Type)
+         (Molecule : list Sorts -> Type)
+         (is_eq : forall {qLab:QWorld}, (Inst Atom qLab) -> (Inst Atom qLab) -> Prop)
+    := {Atom := Atom; Molecule := Molecule; is_eq := @is_eq}.
 
-  Inductive TypingDec (QST: QSTypes): DecStruct -> list QST.(Sorts) -> Type  :=
+  Inductive TypingDec `{QST:QSTypes}
+  : DecStruct -> list Sorts -> Type  :=
   | TleafP : forall {l}, Atom l -> TypingDec sleafP l
   | TleafN : forall {l}, Molecule l -> TypingDec sleafN l
   | Tdummy : forall {l}, TypingDec sdummy l
@@ -139,28 +152,16 @@ of C, A and B, respectively.
 readq, readp and readn are for reading the values.
    *)
 
-  Record World (QS:QuantifyingStructures) :=
+  Record World `{QS:QuantifyingStructures} :=
     {
       PLab:Type;
       NLab:Type;
-      QLab:QS.(QWorld)
-    }.
-
-  Record Contexts {QS:QuantifyingStructures}
-         (wextends: DecStruct -> World QS -> World QS)
-         (A B C:Type)(D:QS.(QWorld) -> Type) := 
-    {
-      Csupport w :> Type;
-      readp w : Csupport w -> w.(PLab) -> A;
-      readn w : Csupport w -> w.(NLab) -> B;
-      readE w : Csupport w -> D w.(QLab);
-      extends w st: 
-        forall v : @Dec C A B st, @Csupport w -> @Csupport (wextends st w)
+      QLab:QWorld
     }.
 
   (* A typing context maps positive variables atoms and negative variables to molecules *)
 
-  Record TypingContexts (QST:QSTypes)(wextends: DecStruct -> World QST -> World QST) := 
+  Record TypingContexts  `{QST:QSTypes} (wextends: DecStruct -> World -> World) := 
     {
       TCsupport w :> Type;
       Treadp w : TCsupport w -> w.(PLab) -> Inst Atom w.(QLab);
@@ -175,22 +176,27 @@ readq, readp and readn are for reading the values.
 To each pattern p is associated a tree skeleton PatDec p
    *)
 
-  Record LAFs :=
-    {
-      QST:> QSTypes;
-      wextends : DecStruct -> World QST -> World QST;
-      TContext : TypingContexts wextends;
-      Patterns : Type;
-      PatDec   : Patterns -> DecStruct;
-      PatternsTyped (p:Patterns) l : @TypingDec QST (PatDec p) l -> Molecule l -> Prop
-    }.
+  Class LAFs
+        `(QST:QSTypes)
+        (wextends : DecStruct -> World -> World)
+        (TContext : TypingContexts wextends)
+        (Patterns : Type)
+        (PatDec   : Patterns -> DecStruct)
+        (PatternsTyped : forall (p:Patterns) l, TypingDec (PatDec p) l -> Molecule l -> Prop)
+    :=
+      {
+        wextends := wextends;
+        TContext := TContext;
+        Patterns := Patterns;
+        PatDec   := PatDec;
+        PatternsTyped := PatternsTyped
+      }.
 
-  Global Arguments TContext {_}.
-  Global Arguments PatternsTyped {_} p {_} _ _.
+  Global Arguments PatternsTyped {_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _} p {l} _ _.
 
   (* We assume we have an instance of LAF *)
 
-  Variable LAF:LAFs.
+  Context `(LAF:LAFs).
 
   (***************)
   (* PROOF-TERMS *)
@@ -210,20 +216,20 @@ represented as a total function to option commands)
 (the result of a partial function to commands)
    *)
 
-  Inductive Pos {w: World LAF}:Type :=
-  | pos: forall p: LAF.(Patterns), @TermDec w (PatDec p) -> Pos
-  with TermDec {w: World LAF}: DecStruct -> Type :=
+  Inductive Pos {w: World}:Type :=
+  | pos: forall p: Patterns, @TermDec w (PatDec p) -> Pos
+  with TermDec {w: World}: DecStruct -> Type :=
        | tleafP: w.(PLab) -> TermDec sleafP
        | tleafN: @Neg w -> TermDec sleafN
        | tdummy: TermDec sdummy
        | tnode {s1 s2}: @TermDec w s1 -> @TermDec w s2 -> TermDec (snode s1 s2)
        | tqnode {s}: Terms w.(QLab) -> @TermDec w s -> TermDec (sqnode s)
-  with Neg {w: World LAF}:Type :=
-       | rei : (forall p:LAF.(Patterns), @OptionCommand (wextends (PatDec p) w)) -> Neg
-  with OptionCommand {w: World LAF}: Type :=
+  with Neg {w: World}:Type :=
+       | rei : (forall p:Patterns, @OptionCommand (wextends (PatDec p) w)) -> Neg
+  with OptionCommand {w: World}: Type :=
        | some: @Command w -> OptionCommand
        | none
-  with Command {w: World LAF}: Type := 
+  with Command {w: World}: Type := 
        | cut   : @Neg w  -> @Pos w -> Command
        | select: w.(NLab) -> @Pos w -> Command.
 
@@ -246,7 +252,7 @@ represented as a total function to option commands)
   (* Abbreviations *)
   (*****************)
 
-  Definition Reifiable w := forall p:Patterns LAF, @OptionCommand (wextends (PatDec p) w).
+  Definition Reifiable w := forall p:Patterns, @OptionCommand (wextends (PatDec p) w).
 
   (* Notation "x + y" := (sum x y). *)
   (* Definition NegVar w := @Neg w + w.(NLab). *)
@@ -282,7 +288,7 @@ Example:
                  -> PosTyping Gamma (pos p v) [A,tl]
                              
   with DecTyping {w} (Gamma: TContext w)
-       : forall l {st}, @TermDec w st -> @TypingDec LAF st l -> TList w.(QLab) l -> Prop :=
+       : forall l {st}, @TermDec w st -> TypingDec st l -> TList w.(QLab) l -> Prop :=
        | typingsub_leafl: forall l xp x (tl:TList w.(QLab) l),
                             is_eq (Treadp Gamma xp) [x,tl]
                             -> DecTyping Gamma (tleafP xp) (TleafP x) tl
@@ -342,6 +348,15 @@ Example:
 
   Combined Scheme typing_ind from typingPos_ind, typingSub_ind, typingNeg_ind, typingOptionCommand_ind, typingCommand_ind.
 
+  Record Contexts (A B C:Type)(D:QWorld -> Type) := 
+    {
+      Csupport w :> Type;
+      readp w : Csupport w -> w.(PLab) -> A;
+      readn w : Csupport w -> w.(NLab) -> B;
+      readE w : Csupport w -> D w.(QLab);
+      extends w st: 
+        forall v : @Dec C A B st, @Csupport w -> @Csupport (wextends st w)
+    }.
 
 End LAF.
 

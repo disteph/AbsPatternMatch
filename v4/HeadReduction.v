@@ -1,13 +1,9 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
 Set Maximal Implicit Insertion.
-Open Scope type_scope.
+(* Unset Printing Implicit Defensive. *)
 
 Require Import ssreflect LAF Semantics NormalisationTheory Basic.
-
-Section HeadReduction.
-
-Variable (LAF:LAFs).
 
 Definition WDep A := {w: World LAF & A w}.
 
@@ -18,8 +14,8 @@ Record AbstractMachines :=
     EPos   : Type;
     ENeg   : Type;
     Closures: World LAF -> Type;
-    EContext: Contexts wextends EPos (ENeg + WDep Closures) ETerms ESoContexts;
-    clNeg w : (@Neg LAF w * EContext w) -> Closures w;
+    EContext: Contexts EPos (ENeg + WDep Closures) ETerms ESoContexts;
+    clNeg w : (@Neg LAF w £ EContext w) -> Closures w;
     clNegInj : forall w cl1 cl2, @clNeg w cl1 = @clNeg w cl2 -> cl1 = cl2;
     EvalTerms {qLab} : ESoContexts qLab -> Terms qLab -> ETerms
   }
@@ -30,8 +26,8 @@ Variable AM: AbstractMachines.
 Definition VNeg := sum AM.(ENeg) (WDep AM.(Closures)).
 Notation "<< x , y >>" := (inr {{ _ , (clNeg (x,y)) }} ).
 
-Definition ECommand := WDep (fun w => @Command LAF w * EContext AM w).
-Notation "<< x | y >>" := (existS (fun w => @Command LAF w * EContext _ w) _ (x,y)).
+Definition ECommand := WDep (fun w => @Command LAF w £ EContext AM w).
+Notation "<< x | y >>" := (existS (fun w => @Command LAF w £ EContext _ w) _ (x,y)).
 
 Definition EDec := @Dec AM.(ETerms) AM.(EPos) VNeg.
 
@@ -48,7 +44,7 @@ Proof.
 Defined.
 Unset Implicit Arguments.
 
-Definition ETriple := VNeg * {p:Patterns LAF & EDec (LAF.(@PatDec) p)}.
+Definition ETriple := VNeg £ {p:Patterns LAF & EDec (LAF.(@PatDec) p)}.
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -136,7 +132,7 @@ Section Normalisation.
     |}
   .
 
-  Variable WF: well_founded (relation (LAF:=LAF)).
+  Variable WF: well_founded relation.
 
   Definition HeadRAlg :=
     {|
@@ -202,7 +198,7 @@ Section Normalisation.
         forall (f: Reifiable w) (rho: HeadRAlg.(SContexts) w) (p: Patterns LAF)
           l Delta (tl:STList HeadRAlg l) (v: SDec (PatDec p)) c,
           f p =cis= c
-          -> SemTDec LAF HeadRAlg Delta tl v
+          -> SemTDec Delta tl v
           -> orth (SemC (extends v rho) c)
           -> orth (I rho f, tild p v).
   Proof.
@@ -219,9 +215,9 @@ Section Normalisation.
   Qed.
 
   Variable TC: forall w st (rho:HeadRAlg.(SContexts) w) Gamma l (Delta:TypingDec st l) tl v, 
-                 SemCont LAF HeadRAlg Gamma rho
-                 -> SemTDec LAF HeadRAlg Delta (SemTermList (readE rho) tl) v
-                 -> SemCont LAF HeadRAlg (Textends [Delta,tl] Gamma) (extends v rho).
+                 SemCont Gamma rho
+                 -> SemTDec Delta (SemTermList (readE rho) tl) v
+                 -> SemCont (Textends [Delta,tl] Gamma) (extends v rho).
   
   Definition HeadModel := 
     {|
@@ -232,7 +228,7 @@ Section Normalisation.
 
   Theorem HeadNormalisation: 
     forall w Gamma c (rho: HeadModel.(SContexts) w),
-      CommandTyping Gamma c -> SemCont LAF HeadRAlg Gamma rho -> SN HeadReduction (SemC rho c).
+      CommandTyping Gamma c -> SemCont Gamma rho -> SN HeadReduction (SemC rho c).
   Proof.
     move => w Gamma c rho H H1.
     elim: (adequacy HeadModel Gamma) => [_ [_ [_ [_ H']]]]. 

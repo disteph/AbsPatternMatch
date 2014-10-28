@@ -1,12 +1,11 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
 Set Maximal Implicit Insertion.
+Unset Printing Implicit Defensive.
 
 Require Import ssreflect Basic LAF List Coq.Program.Equality.
 
-Section Semantics.
-
-Variable (LAF: LAFs).
+Variable LAF: LAFs.
 
 Section TermSemantics.
 
@@ -594,4 +593,73 @@ orthogonality relation be closed "under anti-reduction" *)
 
 End Adequacy.
 
-End Semantics.
+Print Assumptions adequacy.
+
+(* Lemma SemTermListRen {QVar QVar'}: *)
+(*       forall (ren:QVar -> QVar') (sigma:@qvaluation M QVar) tau, *)
+(*         (forall xq, tau (ren xq) = sigma xq) *)
+(*         -> forall l tl, SemTermList (l := l) sigma tl = SemTermList tau (UTTermListRen ren tl). *)
+(* Proof. *)
+(*   intros. *)
+(*   induction l. *)
+(*   dependent inversion tl =>//. *)
+(*   dependent inversion tl =>//=. *)
+(*   rewrite (M.(SemTermsRen) (QVar := QVar) (QVar' := QVar') ren sigma tau) =>//. *)
+(*   by rewrite IHl. *)
+(* Qed. *)
+
+
+(*   Lemma SemPos2Treelift  qVar qVar' (sigma:qvaluation qVar) (tau:qvaluation qVar') (ren:qVar -> qVar') st qnew l Delta (tl:UTTermList M.(terms) l) tl' v  *)
+(*   :  (forall xq, tau (ren xq) = sigma xq) *)
+(*      -> correctNaming tau v qnew *)
+(*      -> tl = SemTermList M tau tl' *)
+(*      -> SemTDec (M := M)(st := st) Delta tl v *)
+(*      -> Treelift M.(sortsI) (Pard atomI tau) (Pard SemNeg tau) (namedTypeTree tl' Delta qnew) v. *)
+
+(*   Proof. *)
+(*     move : l Delta tl tl'. *)
+(*     induction st => l Delta tl tl' H0 H1  H2; dependent induction v =>//=; dependent induction Delta =>//=; dependent induction qnew =>//=. *)
+(*     rewrite /getA/getTerms/ex2.  *)
+(*     by rewrite H2. *)
+(*     rewrite /getA/getTerms/ex2.  *)
+(*     by rewrite H2. *)
+(*     simpl in H1.  *)
+(*     elim: H1 => H3 H4. *)
+(*     move => [I1 I2]; split ; [apply (IHst1 _ _ _ _ tl) | apply (IHst2 _ _ _ _ tl) ] =>//. *)
+(*     simpl in H1.  *)
+(*     elim: H1 => H3 H4. *)
+(*     elim => H5 H6; split => //. *)
+(*     clear IHv IHDelta IHqnew. *)
+(*     apply (IHst _ _ _ _ (TermCons c Logic.I tl)) =>//. *)
+(*     simpl. *)
+(*     by rewrite SemTermsVar H3 H2. *)
+(* Qed. *)
+
+(*   Lemma compatrename w w' Gamma rho sigma tau (ren:w.(QVar) -> w'.(QVar)) *)
+(*   (pi: forall xq, tau (ren xq) = sigma xq) *)
+(*   : compat sigma Gamma rho -> compat tau (Contmap (w:=w) (fun i => i) (ParRen ren) (ParRen ren) Gamma) rho. *)
+(*   Proof. *)
+(*     rewrite/compat/Contlift/Contmap;elim => H1 [H2 H3] /=. *)
+(*                                               split => //;split. *)
+(*     move => xp. *)
+(*     move: (H2 xp); clear H2 H3. *)
+(*     elim : (readp Gamma xp) => l [a tl].  *)
+(*     rewrite /Pard/ParRen/ex1/getA/getTerms/ex2; simpl. *)
+(*     rewrite (SemTermListRen (QVar := w.(QVar)) (QVar' := w'.(QVar)) M ren sigma tau) =>//. *)
+(*     move => xn. *)
+(*     move: (H3 xn); clear H2 H3. *)
+(*     elim : (readn Gamma xn) => l [a tl].  *)
+(*     rewrite /Pard/ParRen/ex1/getA/getTerms/ex2; simpl. *)
+(*     rewrite (SemTermListRen (QVar := w.(QVar)) (QVar' := w'.(QVar)) M ren sigma tau) =>//. *)
+(* Qed. *)
+
+(* apply (SemPos2Treelift _ _ rho.(readq) _ (qinject Context (PatTree p) w) (PatTree p) (qnew Context (PatTree p) w) l Delta (SemTermList M rho.(readq) tl) (UTTermListRen (qinject Context (PatTree p) w) tl))=> // . *)
+(* move => xq. *)
+(* apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)). *)
+(* apply (Context.(extends_qnew) (w:=w) (st:=PatTree p)). *)
+(* apply SemTermListRen. *)
+(* move => xq. *)
+(* apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)). *)
+(* apply (compatrename _ _ _ _ rho.(readq)) => //. *)
+(* move => xq. *)
+(* apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)). *)

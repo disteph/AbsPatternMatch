@@ -1,49 +1,54 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
 Set Maximal Implicit Insertion.
-Unset Printing Implicit Defensive.
 
 Require Import ssreflect Basic LAF List Coq.Program.Equality Semantics.
 
-Record ValuesSystem(MW : RealisabilityAlg) :=
-  {
-    isVal    : MW.(SNeg) -> Prop;
-    orthVal  : forall tn tp, orth (tn,tp) -> isVal tn ;
-    nonempty : forall st l (Delta:TypingDec st l) tl, exists v, SemTDec (M:=MW) Delta tl v;
-    isValtriv {w}:
-      forall rho (f:Reifiable w),
-        (forall p c, f p =cis= c -> isVal (SemN rho (rei f)))
-        -> isVal (SemN rho (rei f))
-  }.
+Section SemanticsNE.
 
-Theorem TypedIsVal (M : FullModel) (VS: ValuesSystem M):
-  forall (w:World LAF) (Gamma:TContext w) (rho:M.(SContexts) w) nt A,
-    NegTyping Gamma nt A ->  SemCont Gamma rho -> VS.(isVal) (SemN rho nt)
-.
-Proof.
-  move => w Gamma rho nt A H0 H1.
-  case: (adequacy M Gamma) => _ [_ [H _]].
-  move:(H nt A H0 rho H1).
-  move: H => _ .
-  rewrite /Pard/SemNeg/getA/getTerms.
-  case: H0 => /=; intros.
-  apply: isValtriv => p c H2.
-  move:(e p c H2).
-  clear H1 A H2 e o.
-  case => Delta H1.
-  rewrite /ortho in H.
-  case:(VS.(nonempty) Delta (SemTermList (readE rho) tl)) => v H2.
-  move: (H (tild p v)) => H3.
-  clear H.
-  have: orth (I rho f, tild p v).
-  apply:H3.
-  apply SemPosDec.
-  apply: (pv _ {{l,A0}} _ _ _ Delta) => //.
+  Variable (LAF: LAFs).
+
+  Record ValuesSystem(MW : RealisabilityAlg LAF) :=
+    {
+      isVal    : MW.(SNeg) -> Prop;
+      orthVal  : forall tn tp, orth (tn,tp) -> isVal tn ;
+      nonempty : forall st l (Delta:TypingDec st l) tl, exists v, SemTDec LAF MW Delta tl v;
+      isValtriv {w}:
+        forall rho (f:Reifiable w),
+          (forall p c, f p =cis= c -> isVal (SemN rho (rei f)))
+          -> isVal (SemN rho (rei f))
+    }.
+
+  Theorem TypedIsVal (M : FullModel LAF) (VS: ValuesSystem M):
+    forall (w:World LAF) (Gamma:TContext w) (rho:M.(SContexts) w) nt A,
+      NegTyping Gamma nt A ->  SemCont LAF M Gamma rho -> VS.(isVal) (SemN rho nt)
+  .
+  Proof.
+    move => w Gamma rho nt A H0 H1.
+    case: (adequacy M Gamma) => _ [_ [H _]].
+    move:(H nt A H0 rho H1).
+    move: H => _ .
+    rewrite /Pard/SemNeg/getA/getTerms.
+    case: H0 => /=; intros.
+    apply: isValtriv => p c H2.
+    move:(e p c H2).
+    clear H1 A H2 e o.
+    case => Delta H1.
+    rewrite /ortho in H.
+    case:(VS.(nonempty) Delta (SemTermList (readE rho) tl)) => v H2.
+    move: (H (tild p v)) => H3.
+    clear H.
+    have: orth (I rho f, tild p v).
+    apply:H3.
+    apply SemPosDec.
+    apply: (pv _ _ {{l,A0}} _ _ _ Delta) => //.
                                      clear H3.
-  apply: orthVal.
-Qed.
+    apply: orthVal.
+  Qed.
 
-Print Assumptions TypedIsVal.
+  Print Assumptions TypedIsVal.
+
+End SemanticsNE.
 
 (* Fixpoint isDecVal {st} (v:SDec st) := *)
 (*   match v with *)

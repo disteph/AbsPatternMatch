@@ -2,7 +2,7 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Set Maximal Implicit Insertion. 
 Generalizable All Variables.
-Typeclasses eauto := 1.
+Typeclasses eauto := 0.
 
 Require Import ssreflect List Basic LAF.
 
@@ -13,7 +13,7 @@ Section LAFwE.
   (* Quantifying Structure *)
   (*************************)
 
-  Definition QSwE2QS_base So Te SoR : QuantifyingStructures :=
+  Canonical QSwE2QS So Te SoR: QuantifyingStructures :=
     {|
       Sorts := So;
       QWorld := Type;
@@ -26,62 +26,54 @@ Section LAFwE.
   Class QuantifyingStructureswE {So Te SoR}
     := 
       {
-        asQS: SClass (@QSwE2QS_base So Te SoR);
-        asT (qLab: QWorld (get asQS)): qLab -> Terms qLab;
-        lift2Terms qLab qLab' 
-        : (qLab -> qLab') -> Terms (q:= get asQS) qLab -> Terms (q:= get asQS) qLab';
+        asQS := QSwE2QS (So:=So) (Te:=Te) SoR;
+        asT qLab : qLab -> Terms (q:=asQS) qLab;
+        lift2Terms qLab qLab' : (qLab -> qLab') -> Terms (q:=asQS) qLab -> Terms (q:= asQS) qLab';
         qLabSorting qLab : 
           forall Sigma (xq:qLab) s, SortingRel Sigma (asT xq) s <-> s = Sigma xq;
         renSorting qLab qLab' :
           forall (pi:qLab -> qLab') Sigma r s, 
-            SortingRel (q:=get asQS) (comp Sigma pi) r s
-            -> SortingRel (q:=get asQS) Sigma (lift2Terms pi r) s
+            SortingRel (q:=asQS) (comp Sigma pi) r s
+            -> SortingRel (q:=asQS) Sigma (lift2Terms pi r) s
       }.
 
-  Canonical QSwE2QS `(Q:QuantifyingStructureswE) := @QSwE2QS_base So Te SoR.
+  Coercion asQS: QuantifyingStructureswE >-> QuantifyingStructures.
 
-  Fixpoint renTList `{QSV:QuantifyingStructureswE}
-           qLab qLab' l (pi:qLab -> qLab')
-  (tl: TList qLab l): TList qLab' l
+  Fixpoint renTList `(Q:QuantifyingStructureswE) qLab qLab' l (pi:qLab -> qLab')
+  (tl: TList (QS:=Q) qLab l): TList (QS:=Q) qLab' l
   := match tl with
         | TermNil => TermNil _ _
-        | TermCons so r l' tl' => TermCons so 
-                                          (lift2Terms (QuantifyingStructureswE := QSV) pi r)
-                                          (renTList pi tl')
+        | TermCons so r l' tl' => TermCons so (lift2Terms pi r) (renTList pi tl')
     end.
 
-  Definition renInst `{QSV:QuantifyingStructureswE}
-             qLab qLab' (pi:qLab -> qLab')
-             {A} (Alr: Inst A qLab): Inst A qLab'
+  Definition renInst  `(Q:QuantifyingStructureswE) qLab qLab' (pi:qLab -> qLab')
+  {A} (Alr: Inst A (QS:=Q) qLab): Inst A (QS:=Q) qLab'
     := [getA Alr,renTList pi (getTerms Alr)].
 
-  Definition QSTwE2QST_base `(QSV:QuantifyingStructureswE) AtomV MoleculeV is_eqV: QSTypes :=
+  Canonical QSTwE2QST `(QSV:QuantifyingStructureswE) AtomV MoleculeV is_eqV: QSTypes :=
     {|
-      QS := QSwE2QS QSV;
+      QS := QSV;
       Atom := AtomV;
       Molecule := MoleculeV;
       is_eq := is_eqV
     |}
   .
 
-  Class QSTypeswE `(QSwE : QuantifyingStructureswE) AtomV MoleculeV is_eqV
-    := 
-      {
-        asQSwE := QSwE;
-        asQST := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV
-      }.
-  
-  Coercion asQSwE: QSTypeswE >-> QuantifyingStructureswE.
+  Class QSTypeswE `{QSV:QuantifyingStructureswE} {AtomV MoleculeV is_eqV} := 
+    {
+      asQSwE := QSV;
+      asQST := QSTwE2QST (QSV:=QSV) (AtomV:=AtomV) MoleculeV is_eqV
+    }.
 
-  Canonical QSTwE2QST `(QSTypeswE)
-    := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV.
+  Coercion asQST: QSTypeswE >-> QSTypes.
+  (* Coercion asQSwE: QSTypeswE >-> QuantifyingStructureswE. *)
 
   Context `(QSTV: QSTypeswE).
 
   Class TContextswE wext :=
     {
-      TCstruct (qLab: QWorld _)
-      : Contexts wext
+      TCstruct (qLab: QWorld QSTV)
+      : Contexts (QS := QSTV) wext
                  (Inst Atom qLab) 
                  (Inst Molecule qLab) 
                  (Terms qLab)
@@ -91,9 +83,9 @@ Section LAFwE.
           (f2: Inst Molecule qLab -> Inst Molecule qLab'),
           ((TCstruct qLab).(Csupport) w)
           -> ((TCstruct qLab').(Csupport) w);
-      TCren {w:World _} st: (w.(QLab):Type) -> (wext st w).(QLab);
-      TCst  {w:World _} st: @Dec (wext st w).(QLab) unit unit st;
-      TCrenProp {w:World _} 
+      TCren {w:World QSTV} st: w.(QLab) -> (wext st w).(QLab);
+      TCst  {w:World QSTV} st: @Dec (wext st w).(QLab) unit unit st;
+      TCrenProp {w:World QSTV} 
                 st 
                 (Gamma:(TCstruct w.(QLab)).(Csupport) w)
                 xq 
@@ -104,7 +96,7 @@ Section LAFwE.
 
   Coercion TCstruct: TContextswE >-> Funclass.
   
-  Definition InstTypingDec {qLab:QWorld _} {st ls}
+  Definition InstTypingDec {qLab:QWorld QSTV} {st ls}
              (qn : @Dec qLab unit unit st)
              (lq: TList qLab ls)
              (Delta:TypingDec st ls)
@@ -140,13 +132,13 @@ Section LAFwE.
 
 End LAFwE.
 
-Definition LAFwE2LAF_base
+Canonical LAFwE2LAF
           `{QSTV:QSTypeswE}
-          {wext : DecStruct -> World _ -> World _} 
-          (TCV: TContextswE _ wext) 
+          {wext : DecStruct -> World QSTV -> World QSTV} 
+          (TCV: TContextswE (QSTV:=QSTV) wext) 
           {PatternsV PatDecV PatternsTypedV} :=
   {|
-    QST := QSTwE2QST QSTV;
+    QST := QSTV;
     wextends := wext;
     TContext := TContextwE2TContext TCV;
     Patterns := PatternsV;
@@ -154,28 +146,22 @@ Definition LAFwE2LAF_base
     PatternsTyped := PatternsTypedV
   |}.
 
-Class LAFswE `{QSTV:QSTypeswE} {wext PatternsV PatDecV PatternsTypedV} :=
+Class LAFswE `{QSTV:QSTypeswE} 
+          {wext : DecStruct -> World QSTV -> World QSTV} 
+          (TCV: TContextswE (QSTV:=QSTV) wext) 
+          {PatternsV PatDecV PatternsTypedV} :=
   {
     asQSTwE := QSTV;
-    TCV : TContextswE _ wext;
-    asLAF := LAFwE2LAF_base (QSTV:=QSTV) (wext:=wext) 
+    asLAF := LAFwE2LAF (QSTV:=QSTV) (wext:=wext) 
                       TCV
                       (PatternsV:=PatternsV)
                       (PatDecV:=PatDecV)
                       (PatternsTypedV:=PatternsTypedV)
   }.
 
-  Coercion asQSTwE: LAFswE >-> QSTypeswE.
+Coercion asLAF: LAFswE >-> LAFs.
 
-  Canonical LAFwE2LAF `(LAFswE)
-    := LAFwE2LAF_base (QSTV:=QSTV) (wext:=wext) TCV
-                     (PatternsV:=PatternsV)
-                     (PatDecV:=PatDecV)
-                     (PatternsTypedV:=PatternsTypedV)
-  .
-
-  Print Canonical Projections.
-  Print Graph.
+Print Graph.
 
 
 (*

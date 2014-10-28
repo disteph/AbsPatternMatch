@@ -1,5 +1,4 @@
 Require Import Coq.Program.Equality.
-Generalizable All Variables.
 
 Notation "{{ p , v }}" := (existS _ p v).
 
@@ -10,9 +9,6 @@ Proof.
 Qed.
 Arguments elim2 {U P p x y} _.
 
-Record SClass {A:Type} (h:A) :=
-  { IClass := A;
-    get : A := h}.
+Notation "x £ y" := (prod x y) (at level 80, right associativity) : type_scope.
 
-Arguments IClass {A h} _.
-Arguments get {A h} _.
+Print Assumptions elim2.

@@ -1,31 +1,37 @@
-DIGEST f84ccc8716503ce0ae36f291c225f1c2
+DIGEST d962985f3243fdc6dd207d8cca3555ff
 FBasic
 R15:34 Coq.Program.Equality <> <> lib
-R65:70 Coq.Init.Specif <> existS syndef
-not 47 <> ::'{{'_x_','_x_'}}'
-prf 87:91 <> elim2
-R117:117 Basic <> U var
-R133:133 Basic <> U var
-R143:143 Basic <> P var
-R145:145 Basic <> p var
-R188:190 Coq.Init.Logic <> :type_scope:x_'='_x not
-R187:187 Basic <> x var
-R191:191 Basic <> y var
-R172:174 Coq.Init.Logic <> :type_scope:x_'='_x not
-R164:165 Basic <> ::'{{'_x_','_x_'}}' not
-R167:168 Basic <> ::'{{'_x_','_x_'}}' not
-R170:171 Basic <> ::'{{'_x_','_x_'}}' not
-R166:166 Basic <> p var
-R169:169 Basic <> x var
-R175:176 Basic <> ::'{{'_x_','_x_'}}' not
-R178:179 Basic <> ::'{{'_x_','_x_'}}' not
-R181:182 Basic <> ::'{{'_x_','_x_'}}' not
-R177:177 Basic <> p var
-R180:180 Basic <> y var
-R209:217 Coq.Logic.ProofIrrelevance ProofIrrelevanceTheory.EqdepTheory inj_pair2 thm
-R209:217 Coq.Logic.ProofIrrelevance ProofIrrelevanceTheory.EqdepTheory inj_pair2 thm
-R235:239 Basic <> elim2 thm
-R235:239 Basic <> elim2 thm
-R279:282 Coq.Init.Datatypes <> prod ind
-not 266 <> :type_scope:x_'£'_x
-R357:361 Basic <> elim2 thm
+R94:99 Coq.Init.Specif <> existS syndef
+not 76 <> ::'{{'_x_','_x_'}}'
+prf 116:120 <> elim2
+R146:146 Basic <> U var
+R162:162 Basic <> U var
+R172:172 Basic <> P var
+R174:174 Basic <> p var
+R217:219 Coq.Init.Logic <> :type_scope:x_'='_x not
+R216:216 Basic <> x var
+R220:220 Basic <> y var
+R201:203 Coq.Init.Logic <> :type_scope:x_'='_x not
+R193:194 Basic <> ::'{{'_x_','_x_'}}' not
+R196:197 Basic <> ::'{{'_x_','_x_'}}' not
+R199:200 Basic <> ::'{{'_x_','_x_'}}' not
+R195:195 Basic <> p var
+R198:198 Basic <> x var
+R204:205 Basic <> ::'{{'_x_','_x_'}}' not
+R207:208 Basic <> ::'{{'_x_','_x_'}}' not
+R210:211 Basic <> ::'{{'_x_','_x_'}}' not
+R206:206 Basic <> p var
+R209:209 Basic <> y var
+R238:246 Coq.Logic.ProofIrrelevance ProofIrrelevanceTheory.EqdepTheory inj_pair2 thm
+R238:246 Coq.Logic.ProofIrrelevance ProofIrrelevanceTheory.EqdepTheory inj_pair2 thm
+R264:268 Basic <> elim2 thm
+R264:268 Basic <> elim2 thm
+rec 293:298 <> SClass
+R312:312 Basic <> A var
+R332:332 Basic <> A var
+R345:345 Basic <> A var
+R350:350 Basic <> h var
+R365:370 Basic <> IClass proj
+R365:370 Basic <> IClass proj
+R391:393 Basic <> get proj
+R391:393 Basic <> get proj
