@@ -7,7 +7,7 @@ Require Import ssreflect LAF Semantics NormalisationTheory Basic.
 
 Section HeadReduction.
 
-Variable (LAF:LAFs).
+Context (LAF:LAFs).
 
 Definition WDep A := {w: World LAF & A w}.
 
@@ -202,7 +202,7 @@ Section Normalisation.
         forall (f: Reifiable w) (rho: HeadRAlg.(SContexts) w) (p: Patterns LAF)
           l Delta (tl:STList HeadRAlg l) (v: SDec (PatDec p)) c,
           f p =cis= c
-          -> SemTDec LAF HeadRAlg Delta tl v
+          -> SemTDec Delta tl v
           -> orth (SemC (extends v rho) c)
           -> orth (I rho f, tild p v).
   Proof.
@@ -219,9 +219,9 @@ Section Normalisation.
   Qed.
 
   Variable TC: forall w st (rho:HeadRAlg.(SContexts) w) Gamma l (Delta:TypingDec st l) tl v, 
-                 SemCont LAF HeadRAlg Gamma rho
-                 -> SemTDec LAF HeadRAlg Delta (SemTermList (readE rho) tl) v
-                 -> SemCont LAF HeadRAlg (Textends [Delta,tl] Gamma) (extends v rho).
+                 SemCont Gamma rho
+                 -> SemTDec Delta (SemTermList (readE rho) tl) v
+                 -> SemCont (Textends [Delta,tl] Gamma) (extends v rho).
   
   Definition HeadModel := 
     {|
@@ -232,7 +232,7 @@ Section Normalisation.
 
   Theorem HeadNormalisation: 
     forall w Gamma c (rho: HeadModel.(SContexts) w),
-      CommandTyping Gamma c -> SemCont LAF HeadRAlg Gamma rho -> SN HeadReduction (SemC rho c).
+      CommandTyping Gamma c -> SemCont Gamma rho -> SN HeadReduction (SemC rho c).
   Proof.
     move => w Gamma c rho H H1.
     elim: (adequacy HeadModel Gamma) => [_ [_ [_ [_ H']]]]. 
@@ -240,5 +240,7 @@ Section Normalisation.
   Qed.
 
 End Normalisation.
+
+End HeadReduction.
 
 Print Assumptions HeadNormalisation.

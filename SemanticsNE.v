@@ -12,7 +12,7 @@ Section SemanticsNE.
     {
       isVal    : MW.(SNeg) -> Prop;
       orthVal  : forall tn tp, orth (tn,tp) -> isVal tn ;
-      nonempty : forall st l (Delta:TypingDec st l) tl, exists v, SemTDec LAF MW Delta tl v;
+      nonempty : forall st l (Delta:TypingDec st l) tl, exists v, SemTDec (M:= MW) Delta tl v;
       isValtriv {w}:
         forall rho (f:Reifiable w),
           (forall p c, f p =cis= c -> isVal (SemN rho (rei f)))
@@ -21,7 +21,7 @@ Section SemanticsNE.
 
   Theorem TypedIsVal (M : FullModel LAF) (VS: ValuesSystem M):
     forall (w:World LAF) (Gamma:TContext w) (rho:M.(SContexts) w) nt A,
-      NegTyping Gamma nt A ->  SemCont LAF M Gamma rho -> VS.(isVal) (SemN rho nt)
+      NegTyping Gamma nt A ->  SemCont Gamma rho -> VS.(isVal) (SemN rho nt)
   .
   Proof.
     move => w Gamma rho nt A H0 H1.

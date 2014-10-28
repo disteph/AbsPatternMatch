@@ -23,7 +23,7 @@ Check (forall Q: c _, (Q:Type) -> Q).
 Record SClass {A:Type} (h:A) := {get : A := h}.
 Arguments get {A h} _.
 
-Class Test'
+Record Test'
        `(super: SClass build)
   :=
     { 
@@ -33,6 +33,7 @@ Class Test'
 
 Record TestClone := { from : Test}.
 
+Canonical assia_tosuper `(super : SClass B): TestClone := {| from := get super |}.
 Canonical tosuper `(t:Test' super): TestClone := {| from := get super |}.
 
 Definition f (t:TestClone) (x:c (from t)) := x.
@@ -42,5 +43,4 @@ Definition g2 `(t:Test' super)(x:c (get super)) := option x.
 
 (* Ne marche plus *)
 
-Definition h1 `(t:Test' super)(x:Type) := option (f _ x).
 Definition h2 `(t:Test' super)(x:c (get super)) := option (f _ x).

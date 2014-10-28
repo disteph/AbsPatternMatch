@@ -6,7 +6,7 @@ Require Import ssreflect Basic LAF List Coq.Program.Equality.
 
 Section Semantics.
 
-Variable (LAF: LAFs).
+Context (LAF: LAFs).
 
 Section TermSemantics.
 
@@ -595,3 +595,9 @@ orthogonality relation be closed "under anti-reduction" *)
 End Adequacy.
 
 End Semantics.
+
+Arguments SemAtom {_ _} _ _ _.
+Arguments SemPos {_ M} _ _ _.
+Arguments SemTDec {_ M l st} _ _ _.
+Arguments SemNeg {_ M} _ _ _.
+Arguments SemCont {_ M w} _ _.
