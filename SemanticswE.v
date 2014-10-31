@@ -1,7 +1,7 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
-Set Maximal Implicit Insertion.
 Unset Printing Implicit Defensive.
+Generalizable All Variables.
 Typeclasses eauto := 1.
 
 Require Import ssreflect Basic LAF LAFwE Semantics List Coq.Program.Equality.
@@ -25,18 +25,24 @@ Section SemanticswE.
         I        := IV
       |}.
   
-
   Class ModelStructureswE
         {STermsV SLabV SPosV SNegV orthV SContextsV tildV SemTermsV IV}
     := 
     {
       asMS : SClass (@MSwE2MS_base STermsV SLabV SPosV SNegV 
                                    orthV SContextsV tildV SemTermsV IV);
+
       qLabSem qLab (xq:qLab)(sigma:Valuations (get asMS) qLab) 
-      : SemTerms sigma (asT xq) = sigma xq;
+      : SemTermsV _ sigma (asT xq) = sigma xq;
+
       reSem qLab qLab' (pi:qLab -> qLab')
-            (r:Terms qLab)(sigma:Valuations (get asMS) qLab'):
-        SemTerms sigma (lift2Terms pi r) = SemTerms ((comp sigma pi):Valuations (get asMS) qLab) r
+            (r:Terms qLab)(tau:Valuations (get asMS) qLab') sigma:
+        (forall xq, tau(pi xq) = sigma xq)
+        -> SemTermsV _ tau (lift2Terms pi r) = SemTermsV _ (sigma:Valuations (get asMS) qLab) r;
+
+      SrenProp: renProp (SContexts (get asMS));
+      SstProp: stProp (SContexts (get asMS))
+
     }
   .
 
@@ -70,101 +76,170 @@ Section SemanticswE.
   Canonical RAwE2RA `(RAwE:RealisabilityAlgwE)
     := RAwE2RA_base welfV SemSoCompatV SemAtom_eqV.
   
-  Definition TypingCorrwE_Prop `{M: RealisabilityAlgwE} :=
+  Lemma Rem53 `{M: RealisabilityAlgwE} w :
+    forall (Gamma: TCV w.(QLab) w)(rho : SContexts _ w),
+      SemCont (LAF:= LAFwE2LAF LAFwE) Gamma rho <-> 
+      Contlift SemSorts (Pard SemAtom (readE rho)) (Pard (SemNeg (M:= RAwE2RA M)) (readE rho)) Gamma rho.
+  Proof.
+    done.
+  Qed.
+
+  Definition TypingCorrwE_Prop `(RA: RealisabilityAlgwE) :=
     forall qLab sigma, GenericCorr
                 (Context1 := TCV qLab)
-                (Context2 := SContexts _)
+                (Context2 := SContexts (RAwE2RA RA))
                 SemSorts
                 (Pard SemAtom sigma)
-                (Pard (SemNeg (M:= RAwE2RA M)) sigma).
+                (Pard (SemNeg (M:= RAwE2RA RA)) sigma).
 
-  Record FullModelwE `{M: RealisabilityAlgwE} := 
+  Lemma SemTermListRen  `(MSwE:ModelStructureswE)
+        {QLab QLab'} (ren:QLab -> QLab') tau sigma
+        l tl:
+    (forall xq, tau(ren xq) = sigma xq)
+    -> SemTermList (M := MSwE2MS MSwE) (l := l) sigma tl
+    = SemTermList (M := MSwE2MS MSwE) tau (renTList ren tl).
+  Proof.
+    intros.
+    induction l;
+    dependent inversion tl =>//=.
+    rewrite (reSem _ (pi := ren)(tau := tau)(sigma := sigma)) =>//.
+    by rewrite IHl.
+  Qed.
+
+  Definition correctNaming {E A B C D:Type} {qVar st} (Sigma: qVar -> E) v nametree
+    := Declift (st:=st) (A:=A) (B:=B) (C:=C) (D:=D)
+              (fun s q => Sigma q = s)
+              (fun _ _ => True)
+              (fun _ _ => True)
+              v nametree.
+
+  Lemma TDec2Dec `{RA: RealisabilityAlgwE}
+        qLab
+        (tau: Valuations (RAwE2RA RA) qLab)
+        l
+        (tl:TList qLab l)
+        (st:DecStruct)
+        (Delta:TypingDec st l)
+        (qnew: @Dec qLab unit unit st)
+        (v:SDec st)
+  : correctNaming tau v qnew
+    -> SemTDec Delta (SemTermList tau tl) v
+    -> Declift SemSorts (Pard SemAtom tau) (Pard SemNeg tau) (InstTypingDec qnew tl Delta) v.
+  Proof.
+    by induction Delta;
+    [ move:(Decstruct sleafP qnew)(Decstruct sleafP v)
+      => [a' rqnew] [b' rv]; rewrite rqnew rv; clear rqnew rv qnew v
+    | move:(Decstruct sleafN qnew)(Decstruct sleafN v)
+      => [a' rqnew] [b' rv]; rewrite rqnew rv; clear rqnew rv qnew v
+    | move:(Decstruct sdummy qnew)(Decstruct sdummy v)
+      => rqnew rv; rewrite rqnew rv; clear rqnew rv qnew v
+    | move:(Decstruct (snode _ _) qnew)(Decstruct (snode _ _) v)
+      => [qnew1 [qnew2 rqnew]] [v1' [v2' rv]]; rewrite rqnew rv; clear rqnew rv qnew v;
+        move => [H1 H2] [H3 H4]; split; [ apply IHDelta1 | apply IHDelta2 ]
+    | move:(Decstruct (sqnode _) qnew)(Decstruct (sqnode _) v)
+      => [qnew1 [xq rqnew]] [v' [t rv]]; rewrite rqnew rv; clear rqnew rv qnew v; simpl;
+        move => [H1 H2] [H3 H4]; split; [ | apply IHDelta; [ | simpl; rewrite qLabSem H1]]
+    ].
+  Qed.
+  
+  Lemma renContlift `{RA: RealisabilityAlgwE}
+  : forall w  (rho : SContexts (RAwE2RA RA) w)
+      (Gamma : TContext w) st (v:SDec st),
+      Contlift SemSorts (Pard SemAtom (readE rho)) (Pard SemNeg (readE rho))
+               Gamma rho
+      ->
+      Contlift SemSorts 
+               (Pard SemAtom (readE (extends v rho)))
+               (Pard SemNeg (readE (extends v rho)))
+               (TCmap (renInst (Extren st)) (renInst (Extren st)) Gamma) 
+               rho.
+  Proof.    
+    move => w rho Gamma st v.
+    rewrite/Contlift/TCmap ;elim => H1 [H2 H3] /=.
+    assert ( ContMap (fun i : Sorts (QSwE2QS LAFwE) => i) 
+         (renInst (Extren st)) (renInst (Extren st)) Gamma
+         ((let (TCstruct, TCmap, _, _, _) as TContextswE
+              return
+                (forall (qLab qLab' : Type) (w0 : World (get asQS)),
+                 (Inst AtomV qLab -> Inst AtomV qLab') ->
+                 (Inst MoleculeV qLab -> Inst MoleculeV qLab') ->
+                 (TContextswE qLab) w0 -> (TContextswE qLab') w0) := TCV in
+          TCmap) (QLab w) (QLab (wextendsE st w)) w 
+                 (renInst (Extren st)) (renInst (Extren st)) Gamma)
+           ).
+    apply (TCmapProp (TContextswE:= TCV) (renInst (Extren st)) (renInst (Extren st)) Gamma ).
+    case: H => [H4 [H5 H6]].
+    split; [move => xq; clear H5 H6 |split; clear H4; [move => xp; clear H6 | move => xn; clear H5]].
+    rewrite H4; apply H1.
+    rewrite H5; clear H5 H1 H3.
+    move:(H2 xp).
+    refine (
+        match readp Gamma xp as A return Pard SemAtom (readE rho) A (readp rho xp) -> Pard SemAtomV (readE (extends v rho))
+     (renInst (Extren st) A) (readp rho xp)
+        with
+          | {{ l , A }} => _
+        end
+      ).
+    elim A.
+    rewrite /renInst/SemAtom/Pard/getA/getTerms/ex2 => a tl.
+    simpl.
+    rewrite <- (SemTermListRen _ (sigma := (readE rho))).
+    done.
+    apply SrenProp.
+    rewrite H6; clear H6 H1 H2.
+    move:(H3 xn).
+    refine (
+        match readn Gamma xn as A return Pard SemNeg (readE rho) A (readn rho xn) -> Pard SemNeg (readE (extends v rho))
+     (renInst (Extren st) A) (readn rho xn)
+        with
+          | {{ l , A }} => _
+        end
+      ).
+    elim A.
+    rewrite /renInst/SemNeg/Pard/getA/getTerms/ex2 => a tl.
+    simpl.
+    rewrite <- (SemTermListRen _ (sigma := (readE rho))).
+    done.
+    apply SrenProp.
+  Qed.
+  
+  Lemma Lem54 `(RA: RealisabilityAlgwE):
+    TypingCorrwE_Prop RA -> TypingCorr_Prop (RAwE2RA RA).
+  Proof.
+    rewrite /TypingCorrwE_Prop/TypingCorr_Prop.
+    move => H w st rho Gamma l Delta tl v H1 H2.
+    move:(H (wextends st w).(QLab) (readE(extends v rho))) ; clear H => H.
+    apply (Rem53 
+             (Textends (t:=TContext) (w:=w) (st:=st) [Delta, tl] Gamma)
+             (extends (c:=SContexts (RAwE2RA RA)) (w:=w) v rho)
+          ).
+    apply: H;
+      [
+      | move: (Rem53 Gamma rho) => [H3 _];
+        move: (H3 H1);clear H1 H3 => H1; apply (renContlift v H1)].
+    apply: TDec2Dec.
+    apply: SstProp.
+    rewrite /getA/getTerms/ex2.
+    rewrite (SemTermListRen _ tl (ren:= Extren st)(sigma := readE rho)(tau := (readE (extends v rho)))) in H2.
+    done.
+    apply SrenProp.   
+  Qed.
+
+
+  Class FullModelwE `{RA: RealisabilityAlgwE} := 
     {
-      asRAwE := M;
-      TypingCorrwE : TypingCorrwE_Prop;
-      StabilitywE w :
-        forall (f: Reifiable w) (rho: SContexts (RAwE2RA M) w) (p: Patterns (LAFwE2LAF LAFwE))
-          l Delta (tl:STList (RAwE2RA M) l) (v: SDec (PatDec p)) c,
-          f p =cis= c
-          -> SemTDec Delta tl v
-          -> orth (SemC (extends v rho) c)
-          -> orth (I rho f, tild p v)
+      asRAwE := RA;
+      TypingCorrwE : TypingCorrwE_Prop RA;
+      StabilitywE  : Stability_Prop (RAwE2RA RA)
     }.
 
   Coercion asRAwE: FullModelwE >-> RealisabilityAlgwE.
 
+  Canonical FMwE2FM `{FMwE: FullModelwE}
+    := {|
+        M0 := RAwE2RA RA;
+        TypingCorr := Lem54 TypingCorrwE ;
+        Stability := StabilitywE
+      |}.
+  
 End SemanticswE.
-
-
-(* Lemma SemTermListRen {QVar QVar'}: *)
-(*       forall (ren:QVar -> QVar') (sigma:@qvaluation M QVar) tau, *)
-(*         (forall xq, tau (ren xq) = sigma xq) *)
-(*         -> forall l tl, SemTermList (l := l) sigma tl = SemTermList tau (UTTermListRen ren tl). *)
-(* Proof. *)
-(*   intros. *)
-(*   induction l. *)
-(*   dependent inversion tl =>//. *)
-(*   dependent inversion tl =>//=. *)
-(*   rewrite (M.(SemTermsRen) (QVar := QVar) (QVar' := QVar') ren sigma tau) =>//. *)
-(*   by rewrite IHl. *)
-(* Qed. *)
-
-
-(*   Lemma SemPos2Treelift  qVar qVar' (sigma:qvaluation qVar) (tau:qvaluation qVar') (ren:qVar -> qVar') st qnew l Delta (tl:UTTermList M.(terms) l) tl' v  *)
-(*   :  (forall xq, tau (ren xq) = sigma xq) *)
-(*      -> correctNaming tau v qnew *)
-(*      -> tl = SemTermList M tau tl' *)
-(*      -> SemTDec (M := M)(st := st) Delta tl v *)
-(*      -> Treelift M.(sortsI) (Pard atomI tau) (Pard SemNeg tau) (namedTypeTree tl' Delta qnew) v. *)
-
-(*   Proof. *)
-(*     move : l Delta tl tl'. *)
-(*     induction st => l Delta tl tl' H0 H1  H2; dependent induction v =>//=; dependent induction Delta =>//=; dependent induction qnew =>//=. *)
-(*     rewrite /getA/getTerms/ex2.  *)
-(*     by rewrite H2. *)
-(*     rewrite /getA/getTerms/ex2.  *)
-(*     by rewrite H2. *)
-(*     simpl in H1.  *)
-(*     elim: H1 => H3 H4. *)
-(*     move => [I1 I2]; split ; [apply (IHst1 _ _ _ _ tl) | apply (IHst2 _ _ _ _ tl) ] =>//. *)
-(*     simpl in H1.  *)
-(*     elim: H1 => H3 H4. *)
-(*     elim => H5 H6; split => //. *)
-(*     clear IHv IHDelta IHqnew. *)
-(*     apply (IHst _ _ _ _ (TermCons c Logic.I tl)) =>//. *)
-(*     simpl. *)
-(*     by rewrite SemTermsVar H3 H2. *)
-(* Qed. *)
-
-(*   Lemma compatrename w w' Gamma rho sigma tau (ren:w.(QVar) -> w'.(QVar)) *)
-(*   (pi: forall xq, tau (ren xq) = sigma xq) *)
-(*   : compat sigma Gamma rho -> compat tau (Contmap (w:=w) (fun i => i) (ParRen ren) (ParRen ren) Gamma) rho. *)
-(*   Proof. *)
-(*     rewrite/compat/Contlift/Contmap;elim => H1 [H2 H3] /=. *)
-(*                                               split => //;split. *)
-(*     move => xp. *)
-(*     move: (H2 xp); clear H2 H3. *)
-(*     elim : (readp Gamma xp) => l [a tl].  *)
-(*     rewrite /Pard/ParRen/ex1/getA/getTerms/ex2; simpl. *)
-(*     rewrite (SemTermListRen (QVar := w.(QVar)) (QVar' := w'.(QVar)) M ren sigma tau) =>//. *)
-(*     move => xn. *)
-(*     move: (H3 xn); clear H2 H3. *)
-(*     elim : (readn Gamma xn) => l [a tl].  *)
-(*     rewrite /Pard/ParRen/ex1/getA/getTerms/ex2; simpl. *)
-(*     rewrite (SemTermListRen (QVar := w.(QVar)) (QVar' := w'.(QVar)) M ren sigma tau) =>//. *)
-(* Qed. *)
-
-
-
-
-
-(* apply (SemPos2Treelift _ _ rho.(readq) _ (qinject Context (PatTree p) w) (PatTree p) (qnew Context (PatTree p) w) l Delta (SemTermList M rho.(readq) tl) (UTTermListRen (qinject Context (PatTree p) w) tl))=> // . *)
-(* move => xq. *)
-(* apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)). *)
-(* apply (Context.(extends_qnew) (w:=w) (st:=PatTree p)). *)
-(* apply SemTermListRen. *)
-(* move => xq. *)
-(* apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)). *)
-(* apply (compatrename _ _ _ _ rho.(readq)) => //. *)
-(* move => xq. *)
-(* apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)). *)

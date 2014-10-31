@@ -632,7 +632,14 @@ Qed.
                 /\ orth M csem).
     apply: (H p Delta) => //.
     apply (Context.(corr) (w:=w) (st:=PatTree p)).
-    apply (SemPos2Treelift _ _ rho.(readq) _ (qinject Context (PatTree p) w) (PatTree p) (qnew Context (PatTree p) w) l Delta (SemTermList M rho.(readq) tl) (UTTermListRen (qinject Context (PatTree p) w) tl))=> // .
+    apply (SemPos2Treelift _ _ rho.(readq) _ 
+                                         (qinject Context (PatTree p) w)
+                                         (PatTree p)
+                                         (qnew Context (PatTree p) w)
+                                         l Delta 
+                                         (SemTermList M rho.(readq) tl) 
+                                         (UTTermListRen (qinject Context (PatTree p) w) tl)
+          )=> // .
     move => xq.
     apply (Context.(extends_qinject) (w:=w) (st:=PatTree p)).
     apply (Context.(extends_qnew) (w:=w) (st:=PatTree p)).

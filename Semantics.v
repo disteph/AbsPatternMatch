@@ -482,23 +482,27 @@ Section Adequacy.
 proof-terms, the Adequacy Lemma requires from a model that its
 orthogonality relation be closed "under anti-reduction" *)
 
+  Unset Maximal Implicit Insertion.
+
+  Definition TypingCorr_Prop (RA:RealisabilityAlg) :=
+        forall w st (rho:RA.(SContexts) w) Gamma l (Delta:TypingDec st l) tl v, 
+          SemCont Gamma rho
+          -> SemTDec Delta (SemTermList (readE rho) tl) v
+          -> SemCont (Textends [Delta,tl] Gamma) (extends v rho).
+
+  Definition Stability_Prop (RA:RealisabilityAlg) :=
+    forall w (f: Reifiable w) (rho: RA.(SContexts) w) (p: Patterns LAF)
+      l Delta (tl:STList RA l) (v: SDec (PatDec p)) c,
+      f p =cis= c
+      -> SemTDec Delta tl v
+      -> orth (SemC (extends v rho) c)
+      -> orth (I rho f, tild p v).
+  
   Record FullModel := 
     {
       M0 :> RealisabilityAlg;
-
-      TypingCorr w st :
-        forall (rho:M0.(SContexts) w) Gamma l (Delta:TypingDec st l) tl v, 
-          SemCont Gamma rho
-          -> SemTDec Delta (SemTermList (readE rho) tl) v
-          -> SemCont (Textends [Delta,tl] Gamma) (extends v rho);
-
-      Stability w :
-        forall (f: Reifiable w) (rho: M0.(SContexts) w) (p: Patterns LAF)
-          l Delta (tl:STList M0 l) (v: SDec (PatDec p)) c,
-          f p =cis= c
-          -> SemTDec Delta tl v
-          -> orth (SemC (extends v rho) c)
-          -> orth (I rho f, tild p v)
+      TypingCorr: TypingCorr_Prop M0 ;
+      Stability : Stability_Prop M0
     }.
 
   (* Here is finally the Adequacy Lemma *)

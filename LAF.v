@@ -1,9 +1,9 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
-Set Maximal Implicit Insertion. 
+Set Maximal Implicit Insertion.
 Open Scope type_scope.
 
-Require Import ssreflect List Basic.
+Require Import ssreflect List Basic Equality.
 
 Section QuantifyingStructure.
   (*************************)
@@ -71,6 +71,7 @@ Inductive DecStruct :=
 
 (* Generic Decomposition type, with two kinds of leaves A and B *)
 
+
 Inductive Dec {C A B: Type}: DecStruct -> Type  :=
 | leafP : A -> Dec sleafP
 | leafN : B -> Dec sleafN
@@ -87,7 +88,7 @@ Definition Declift (E F A B C D: Type)
            (RelQ: E -> F -> Prop)
            (RelP: A -> C -> Prop)
            (RelN: B -> D -> Prop)
-           {st} 
+           {st}
 : @Dec E A B st -> @Dec F C D st -> Prop.
 Proof.
   induction st; move => v Delta ; inversion v ; inversion Delta.
@@ -98,6 +99,132 @@ Proof.
   exact ((RelQ X X1)/\(IHst X0 X2)).
 Defined.
 
+(* Inductive Declift {E F A B C D: Type} *)
+(*            {RelQ: E -> F -> Prop} *)
+(*            {RelP: A -> C -> Prop} *)
+(*            {RelN: B -> D -> Prop} *)
+(* : forall st, @Dec E A B st -> forall st', @Dec F C D st' -> Prop *)
+(*   := *)
+(*     | leafPlift p1 p2 : RelP p1 p2 -> Declift (leafP p1)(leafP p2) *)
+(*     | leafNlift n1 n2 : RelN n1 n2 -> Declift (leafN n1)(leafN n2) *)
+(*     | dummylift : Declift dummy dummy *)
+(*     | nodelift s s'  *)
+(*                (v1:Dec s) (v1': Dec s')  *)
+(*                (v2:Dec s) (v2': Dec s') *)
+(*       : Declift v1 v2 -> Declift v1' v2' -> Declift (node v1 v1') (node v2 v2') *)
+(*     | qnodelift s (v1:Dec s) (v2: Dec s) t1 t2 *)
+(*       : RelQ t1 t2 -> Declift v1 v2 -> Declift (qnode t1 v1) (qnode t2 v2) *)
+(* . *)
+
+Global Arguments Declift {E F A B C D} RelQ RelP RelN [st] _ _.
+
+(* Definition DCeq {C A B} := Declift (@eq C) (@eq A)  (@eq B). *)
+
+(* Lemma DCeqeq {C A B} : forall st (v: @Dec C A B st) (v':@Dec C A B st), DCeq v v' <-> v = v'. *)
+(* Proof. *)
+(*   move => st v v'. *)
+(*   split => H. *)
+(*   by dependent induction H ; *)
+(*     [ rewrite H *)
+(*     | rewrite H *)
+(*     | *)
+(*     | rewrite IHDeclift1;rewrite IHDeclift2 *)
+(*     | rewrite H;rewrite IHDeclift *)
+(*     ]; move =>//. *)
+(*   rewrite <- H; clear H v'. *)
+(*   by induction v; *)
+(*     [ apply leafPlift *)
+(*     | apply leafNlift *)
+(*     | apply dummylift *)
+(*     | apply nodelift *)
+(*     | apply qnodelift]. *)
+(* Qed. *)
+
+(* Lemma Decstruct {C A B: Type} st: *)
+(*   match st with *)
+(*     | sleafP => forall (v:Dec (C := C) (A := A) (B := B) sleafP), exists a, v = leafP a *)
+(*     | sleafN => forall (v:Dec (C := C) (A := A) (B := B) sleafN), exists a, v = leafN a *)
+(*     | sdummy => forall (v:Dec (C := C) (A := A) (B := B) sdummy), v = dummy *)
+(*     | snode s1 s2 => forall (v:Dec (C := C) (A := A) (B := B) (snode s1 s2)), *)
+(*                     exists (v1:Dec s1)(v2:Dec s2), v = node v1 v2 *)
+(*     | sqnode s0 => forall (v:Dec (C := C) (A := A) (B := B) (sqnode s0)), *)
+(*                     exists (v0:Dec s0) t, v = qnode t v0 *)
+(*   end. *)
+(* Proof. *)
+(*   assert *)
+(*     (forall (v:Dec (C := C) (A := A) (B := B) st), *)
+(*       match st with *)
+(*         | sleafP => exists a, DCeq v (leafP a) *)
+(*         | sleafN => exists a, DCeq v (leafN a) *)
+(*         | sdummy => DCeq v dummy *)
+(*         | snode s1 s2 => exists (v1:Dec s1)(v2:Dec s2), DCeq v (node v1 v2) *)
+(*         | sqnode s0 => exists (v0:Dec s0) t, DCeq v (qnode t v0) *)
+(*       end *)
+(*     ). *)
+(*   move => v. *)
+(*   by case v; *)
+(*   [ *)
+(*     move => a; exists a; apply leafPlift *)
+(*   | move => b; exists b; apply leafNlift *)
+(*   | apply dummylift *)
+(*   | move => s1 s2 v1 v2; exists v1; exists v2; rewrite DCeqeq *)
+(*   | move => s t v0; exists v0; exists t; rewrite DCeqeq *)
+(*   ]. *)
+(*   by move:H; case st *)
+(*   =>  [ | | | s1 s2 | s ]; *)
+(*   move => H v; move:(H v); clear H; *)
+(*          [ move => [a H]; exists a *)
+(*          | move => [b H]; exists b  *)
+(*          | move => H *)
+(*          | move => [v1 [v2 H]]; exists v1; exists v2 *)
+(*          | move => [v0 [t H]]; exists v0; exists t *)
+(*          ] *)
+(*   ; *)
+(*   apply DCeqeq. *)
+(* Qed. *)
+
+Lemma Decstruct {C A B: Type} st:
+  match st with
+    | sleafP => forall (v:Dec (C := C) (A := A) (B := B) sleafP), exists a, v = leafP a
+    | sleafN => forall (v:Dec (C := C) (A := A) (B := B) sleafN), exists a, v = leafN a
+    | sdummy => forall (v:Dec (C := C) (A := A) (B := B) sdummy), v = dummy
+    | snode s1 s2 => forall (v:Dec (C := C) (A := A) (B := B) (snode s1 s2)),
+                    exists (v1:Dec s1)(v2:Dec s2), v = node v1 v2
+    | sqnode s0 => forall (v:Dec (C := C) (A := A) (B := B) (sqnode s0)),
+                    exists (v0:Dec s0) t, v = qnode t v0
+  end.
+Proof.
+  assert
+    (forall (v:Dec (C := C) (A := A) (B := B) st),
+      match st with
+        | sleafP => exists a, JMeq v (leafP (C := C) (A := A) (B := B) a)
+        | sleafN => exists a, JMeq v (leafN (C := C) (A := A) (B := B) a)
+        | sdummy => JMeq v (dummy (C := C) (A := A) (B := B) )
+        | snode s1 s2 => exists (v1:Dec s1)(v2:Dec s2), JMeq v (node (C := C) (A := A) (B := B) v1 v2)
+        | sqnode s0 => exists (v0:Dec s0) t, JMeq v (qnode (C := C) (A := A) (B := B) t v0)
+      end
+    ).
+  move => v.
+  by case v;
+  [
+    move => a; exists a
+  | move => b; exists b
+  | 
+  | move => s1 s2 v1 v2; exists v1; exists v2; apply JMeq_refl
+  | move => s t v0; exists v0; exists t; apply JMeq_refl
+  ].
+  by move:H; case st
+  =>  [ | | | s1 s2 | s ];
+  move => H v; move:(H v); clear H;
+         [ move => [a H]; exists a
+         | move => [b H]; exists b 
+         | move => H
+         | move => [v1 [v2 H]]; exists v1; exists v2
+         | move => [v0 [t H]]; exists v0; exists t
+         ]
+  ;
+  apply JMeq_eq.
+Qed.
 
 Section LAF.
 

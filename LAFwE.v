@@ -1,6 +1,5 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
-Set Maximal Implicit Insertion. 
 Generalizable All Variables.
 Typeclasses eauto := 1.
 
@@ -27,18 +26,28 @@ Section LAFwE.
     := 
       {
         asQS: SClass (@QSwE2QS_base So Te SoR);
+
         asT (qLab: QWorld (get asQS)): qLab -> Terms qLab;
+
         lift2Terms qLab qLab' 
         : (qLab -> qLab') -> Terms (q:= get asQS) qLab -> Terms (q:= get asQS) qLab';
+
         qLabSorting qLab : 
           forall Sigma (xq:qLab) s, SortingRel Sigma (asT xq) s <-> s = Sigma xq;
+
         renSorting qLab qLab' :
           forall (pi:qLab -> qLab') Sigma r s, 
             SortingRel (q:=get asQS) (comp Sigma pi) r s
-            -> SortingRel (q:=get asQS) Sigma (lift2Terms pi r) s
+            -> SortingRel (q:=get asQS) Sigma (lift2Terms pi r) s;
+
+        wextendsE : DecStruct -> World (get asQS) -> World (get asQS);
+        Extren {w:World (get asQS)} st: (w.(QLab):Type) -> ((wextendsE st w).(QLab):Type);
+        Extst  {w:World (get asQS)} st: @Dec (wextendsE st w).(QLab) unit unit st
       }.
 
   Canonical QSwE2QS `(QuantifyingStructureswE) := @QSwE2QS_base So Te SoR.
+
+  (* Renaming in term lists and instantiated things *)
 
   Fixpoint renTList `{QuantifyingStructureswE}
            qLab qLab' l (pi:qLab -> qLab') (tl: TList qLab l) : TList qLab' l
@@ -52,8 +61,52 @@ Section LAFwE.
              {A} (Alr: Inst A qLab): Inst A qLab'
     := [getA Alr,renTList pi (getTerms Alr)].
 
-  Definition ContextswE `{QuantifyingStructureswE} wext A B C
-    := Contexts wext A B C (fun qLab => (qLab:Type) -> C).
+  (* Stuff about generic contexts *)
+
+  Definition ContextswE `{QuantifyingStructureswE} A B C
+    := Contexts wextendsE A B C (fun qLab => (qLab:Type) -> C).
+
+  Definition renProp
+             `{QuantifyingStructureswE} 
+             `(Cont: ContextswE A B C)
+    := forall w st (Gamma:Cont w) Delta xq, 
+        readE (extends Delta Gamma)(Extren st xq) = readE Gamma xq.
+
+  Definition stProp
+             `{QuantifyingStructureswE} 
+             `(Cont: ContextswE A B C)
+    := forall w st (Gamma:Cont w) Delta,
+        Declift (fun s xq => readE (extends Delta Gamma) xq = s)
+                (fun _ _ => True)
+                (fun _ _ => True)
+                Delta (Extst st).
+
+  Definition Contlift `{QuantifyingStructureswE}{E F A B C D:Type}
+             (RelQ: E -> F -> Prop)
+             (RelP: A -> C -> Prop)
+             (RelN: B -> D -> Prop)
+             {Context1 : ContextswE A B E}
+             {Context2 : ContextswE C D F}
+             {w} 
+  : Context1 w -> Context2 w -> Prop
+    := fun Gamma rho =>
+        (forall xq, RelQ (readE Gamma xq) (readE rho xq))
+        /\ (forall xp, RelP (readp Gamma xp) (readp rho xp))
+        /\ (forall xn, RelN (readn Gamma xn) (readn rho xn))
+  .
+
+  Definition ContMap `{QuantifyingStructureswE}{E F A B C D:Type}
+             (fQ: E -> F)
+             (fP: A -> C)
+             (fN: B -> D)
+             {Context1 : ContextswE A B E}
+             {Context2 : ContextswE C D F}
+             {w} 
+  : Context1 w -> Context2 w -> Prop
+    := Contlift (fun c c' => c' = fQ c) (fun c c' => c' = fP c) (fun c c' => c' = fN c).
+
+  (* Enriching Quantifying structures with types (instantiated atoms
+  and molecules), now with eigenvariables *)
 
   Definition QSTwE2QST_base `(QSV:QuantifyingStructureswE) AtomV MoleculeV is_eqV: QSTypes :=
     {|
@@ -76,28 +129,30 @@ Section LAFwE.
   Canonical QSTwE2QST `(QSTypeswE)
     := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV.
 
+  (* Now we define typing contexts in the sense of LAF with eigenvariables *)
+
   Context `(QSTV: QSTypeswE).
 
-  Class TContextswE wext :=
+  Class TContextswE :=
     {
-      TCstruct (qLab: QWorld _)
-      : ContextswE wext
-                 (Inst Atom qLab) 
-                 (Inst Molecule qLab) 
-                 (Sorts (QSwE2QS QSTV));
-      TCmap qLab qLab' w :
+      TCstruct (qLab: QWorld (QSTwE2QST QSTV))
+      : ContextswE (Inst Atom qLab) 
+                   (Inst Molecule qLab) 
+                   (Sorts (QSwE2QS QSTV));
+
+      TCmap (qLab qLab': QWorld (QSTwE2QST QSTV)) w :
         forall (f1: Inst Atom qLab -> Inst Atom qLab')
           (f2: Inst Molecule qLab -> Inst Molecule qLab'),
           ((TCstruct qLab).(Csupport) w)
           -> ((TCstruct qLab').(Csupport) w);
-      TCren {w:World _} st: (w.(QLab):Type) -> (wext st w).(QLab);
-      TCst  {w:World _} st: @Dec (wext st w).(QLab) unit unit st;
-      TCrenProp {w:World _} 
-                st 
-                (Gamma:(TCstruct w.(QLab)).(Csupport) w)
-                xq 
-                Delta:
-        readE (extends Delta Gamma)(TCren st xq) = readE Gamma xq
+      TCmapProp qLab qLab' w
+                (f1: Inst Atom qLab -> Inst Atom qLab')
+                (f2: Inst Molecule qLab -> Inst Molecule qLab')
+                (Gamma: TCstruct qLab w)
+      : ContMap (fun i => i) f1 f2 Gamma (TCmap f1 f2 Gamma);
+
+      TCrenProp qLab : renProp (TCstruct qLab);
+      TCstProp qLab : stProp (TCstruct qLab)
     }
   .
 
@@ -111,29 +166,26 @@ Section LAFwE.
   Proof.
     move:ls lq Delta.
     induction st => ls lq Delta; inversion Delta; inversion qn => //=.
-                                                          exact (leafP([X,lq])).
+    exact (leafP([X,lq])).
     exact (leafN([X,lq])).
     exact (dummy).
     exact (node (IHst1 X1 ls lq X) (IHst2 X2 ls lq X0)).
     exact (qnode so (IHst X1 (so::ls) (TermCons so (asT X0) lq) X)).
   Defined.
 
-  Definition TContextwE2TContext `(TCV: TContextswE wext) :=
+  Coercion TContextwE2TContext `(TCV: TContextswE) :=
     {|
       TCsupport w := TCV w.(QLab) w;
       Treadp w := readp (c := TCV w.(QLab)) (w:=w);
       Treadn w := readn (c := TCV w.(QLab)) (w:=w);
       TreadE w := readE (c := TCV w.(QLab)) (w:=w);
       Textends w st Deltal Gamma :=
-        extends (st:=st) (c:=TCV (wext st w).(QLab))
-                (InstTypingDec (qLab := (wext st w).(QLab)) 
-                               (TCst (TContextswE := TCV) st) 
-                               (renTList (TCren (TContextswE := TCV) st) (getTerms Deltal)) 
+        extends (st:=st) (c:=TCV (wextendsE st w).(QLab))
+                (InstTypingDec (qLab := (wextendsE st w).(QLab)) 
+                               (Extst st) 
+                               (renTList (Extren st) (getTerms Deltal)) 
                                (getA Deltal))
-                (TCmap (renInst
-                          (TCren (TContextswE := TCV) st))
-                       (renInst
-                          (TCren (TContextswE := TCV) st)) Gamma)
+                (TCmap (renInst (Extren st)) (renInst (Extren st)) Gamma)
     |}
   .
 
@@ -141,23 +193,22 @@ End LAFwE.
 
 Definition LAFwE2LAF_base
           `{QSTV:QSTypeswE}
-          {wext : DecStruct -> World _ -> World _} 
-          (TCV: TContextswE _ wext) 
+          (TCV: TContextswE _) 
           {PatternsV PatDecV PatternsTypedV} :=
   {|
     QST := QSTwE2QST QSTV;
-    wextends := wext;
-    TContext := TContextwE2TContext TCV;
+    wextends := wextendsE;
+    TContext := TCV;
     Patterns := PatternsV;
     PatDec   := PatDecV;
     PatternsTyped := PatternsTypedV
   |}.
 
-Class LAFswE `{QSTV:QSTypeswE} {wext PatternsV PatDecV PatternsTypedV} :=
+Class LAFswE `{QSTV:QSTypeswE} {PatternsV PatDecV PatternsTypedV} :=
   {
     asQSTwE := QSTV;
-    TCV : TContextswE _ wext;
-    asLAF := LAFwE2LAF_base (QSTV:=QSTV) (wext:=wext) 
+    TCV : TContextswE _;
+    asLAF := LAFwE2LAF_base (QSTV:=QSTV)
                       TCV
                       (PatternsV:=PatternsV)
                       (PatDecV:=PatDecV)
@@ -167,49 +218,20 @@ Class LAFswE `{QSTV:QSTypeswE} {wext PatternsV PatDecV PatternsTypedV} :=
 Coercion asQSTwE: LAFswE >-> QSTypeswE.
 
 Canonical LAFwE2LAF `(LAFswE)
-  := LAFwE2LAF_base (QSTV:=QSTV) (wext:=wext) TCV
+  := LAFwE2LAF_base (QSTV:=QSTV) TCV
                    (PatternsV:=PatternsV)
                    (PatDecV:=PatDecV)
-                     (PatternsTypedV:=PatternsTypedV)
+                   (PatternsTypedV:=PatternsTypedV)
 .
 
-Print Canonical Projections.
-Print Graph.
 
-
-Definition Contlift `{QuantifyingStructureswE}{wext}{E F A B C D:Type}
-           (RelQ: E -> F -> Prop)
-           (RelP: A -> C -> Prop) 
-           (RelN: B -> D -> Prop)
-           {Context1 : ContextswE wext A B E}
-           {Context2 : ContextswE wext C D F}
-           {w} 
-: Context1 w -> Context2 w -> Prop
-  := fun Gamma rho =>
-      (forall xq, RelQ (readE Gamma xq) (readE rho xq))
-      /\ (forall xp, RelP (readp Gamma xp) (readp rho xp))
-      /\ (forall xn, RelN (readn Gamma xn) (readn rho xn))
-.
-
-Definition GenericCorr `{QuantifyingStructureswE}{wext}{E F A B C D:Type} 
+Definition GenericCorr `{QuantifyingStructureswE}{E F A B C D:Type} 
            (RelQ: E -> F -> Prop)
            (RelP: A -> C -> Prop)
            (RelN: B -> D -> Prop)
-           {Context1 : ContextswE wext A B E}
-           {Context2 : ContextswE wext C D F}
+           {Context1 : ContextswE A B E}
+           {Context2 : ContextswE C D F}
 := forall w st (Gamma:Context1 w) (rho:Context2 w) v Delta,
     Declift RelQ RelP RelN (st:=st) Delta v
     -> Contlift RelQ RelP RelN Gamma rho 
     -> Contlift RelQ RelP RelN (extends Delta Gamma) (extends v rho).
-
-
-
-(*
-
-Definition correctNaming {E A B C D:Type} {qVar st} (Sigma: qVar -> E) v nametree
-  := Declift (st:=st) (A:=A) (B:=B) (C:=C) (D:=D)
-             (fun s q => Sigma q = s)
-             (fun _ _ => True)
-             (fun _ _ => True)
-             v nametree.
-*)
