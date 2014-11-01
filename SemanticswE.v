@@ -235,11 +235,16 @@ Section SemanticswE.
 
   Coercion asRAwE: FullModelwE >-> RealisabilityAlgwE.
 
-  Canonical FMwE2FM `{FMwE: FullModelwE}
+  Canonical FMwE2FM `(FullModelwE)
     := {|
         M0 := RAwE2RA RA;
         TypingCorr := Lem54 TypingCorrwE ;
         Stability := StabilitywE
       |}.
+
+  Definition adequacywE `(FMwE: FullModelwE)
+    := adequacy (FMwE2FM FMwE).
+
+  Check adequacywE.
   
 End SemanticswE.
