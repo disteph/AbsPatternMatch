@@ -158,7 +158,7 @@ Section SemanticswE.
     rewrite/Contlift/TCmap ;elim => H1 [H2 H3] /=.
     assert ( ContMap (fun i : Sorts (QSwE2QS LAFwE) => i) 
          (renInst (Extren st)) (renInst (Extren st)) Gamma
-         ((let (TCstruct, TCmap, _, _, _) as TContextswE
+         ((let (TCstruct, TCmap, _) as TContextswE
               return
                 (forall (qLab qLab' : Type) (w0 : World (get asQS)),
                  (Inst AtomV qLab -> Inst AtomV qLab') ->

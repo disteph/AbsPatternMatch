@@ -188,14 +188,12 @@ Section LAFwE.
           (f2: Inst Molecule qLab -> Inst Molecule qLab'),
           ((TCstruct qLab).(Csupport) w)
           -> ((TCstruct qLab').(Csupport) w);
+
       TCmapProp qLab qLab' w
                 (f1: Inst Atom qLab -> Inst Atom qLab')
                 (f2: Inst Molecule qLab -> Inst Molecule qLab')
                 (Gamma: TCstruct qLab w)
-      : ContMap (fun i => i) f1 f2 Gamma (TCmap f1 f2 Gamma);
-
-      TCrenProp qLab : renProp (TCstruct qLab);
-      TCstProp qLab : stProp (TCstruct qLab)
+      : ContMap (fun i => i) f1 f2 Gamma (TCmap f1 f2 Gamma)
     }
   .
 
