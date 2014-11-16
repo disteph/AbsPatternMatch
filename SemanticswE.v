@@ -108,7 +108,7 @@ Section SemanticswE.
 
   Definition correctNaming {E A B C D:Type} {qVar st} (Sigma: qVar -> E) v nametree
     := Declift (st:=st) (A:=A) (B:=B) (C:=C) (D:=D)
-              (fun s q => Sigma q = s)
+              (fun s q => s = Sigma q)
               (fun _ _ => True)
               (fun _ _ => True)
               v nametree.
@@ -138,7 +138,7 @@ Section SemanticswE.
         move => [H1 H2] [H3 H4]; split; [ apply IHDelta1 | apply IHDelta2 ]
     | move:(Decstruct (sqnode _) qnew)(Decstruct (sqnode _) v)
       => [qnew1 [xq rqnew]] [v' [t rv]]; rewrite rqnew rv; clear rqnew rv qnew v; simpl;
-        move => [H1 H2] [H3 H4]; split; [ | apply IHDelta; [ | simpl; rewrite qLabSem H1]]
+        move => [H1 H2] [H3 H4]; split; [ | apply IHDelta; [ | simpl; rewrite qLabSem -H1]]
     ].
   Qed.
   
@@ -245,6 +245,6 @@ Section SemanticswE.
   Definition adequacywE `(FMwE: FullModelwE)
     := adequacy (FMwE2FM FMwE).
 
-  Check adequacywE.
+  (* Check adequacywE. *)
   
 End SemanticswE.

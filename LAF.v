@@ -255,22 +255,22 @@ represented as a total function to option commands)
 (the result of a partial function to commands)
    *)
 
-  Inductive Pos {w: World LAF}:Type :=
-  | pos: forall p: LAF.(Patterns), @TermDec w (PatDec p) -> Pos
-  with TermDec {w: World LAF}: DecStruct -> Type :=
-       | tleafP: w.(PLab) -> TermDec sleafP
-       | tleafN: @Neg w -> TermDec sleafN
-       | tdummy: TermDec sdummy
-       | tnode {s1 s2}: @TermDec w s1 -> @TermDec w s2 -> TermDec (snode s1 s2)
-       | tqnode {s}: Terms w.(QLab) -> @TermDec w s -> TermDec (sqnode s)
-  with Neg {w: World LAF}:Type :=
-       | rei : (forall p:LAF.(Patterns), @OptionCommand (wextends (PatDec p) w)) -> Neg
-  with OptionCommand {w: World LAF}: Type :=
-       | some: @Command w -> OptionCommand
+  Inductive Pos (w: World LAF):Type :=
+  | pos: forall p: LAF.(Patterns), TermDec w (PatDec p) -> Pos w
+  with TermDec (w: World LAF): DecStruct -> Type :=
+       | tleafP: w.(PLab) -> TermDec w sleafP
+       | tleafN: Neg w -> TermDec w sleafN
+       | tdummy: TermDec w sdummy
+       | tnode {s1 s2}: TermDec w s1 -> TermDec w s2 -> TermDec w (snode s1 s2)
+       | tqnode {s}: Terms w.(QLab) -> TermDec w s -> TermDec w (sqnode s)
+  with Neg (w: World LAF):Type :=
+       | rei : (forall p:LAF.(Patterns), OptionCommand (wextends (PatDec p) w)) -> Neg w
+  with OptionCommand (w: World LAF): Type :=
+       | some: Command w -> OptionCommand w
        | none
-  with Command {w: World LAF}: Type := 
-       | cut   : @Neg w  -> @Pos w -> Command
-       | select: w.(NLab) -> @Pos w -> Command.
+  with Command (w: World LAF): Type := 
+       | cut   : Neg w  -> Pos w -> Command w
+       | select: w.(NLab) -> Pos w -> Command w.
 
   Global Arguments pos {w} p _.
 
@@ -291,18 +291,18 @@ represented as a total function to option commands)
   (* Abbreviations *)
   (*****************)
 
-  Definition Reifiable w := forall p:Patterns LAF, @OptionCommand (wextends (PatDec p) w).
+  Definition Reifiable w := forall p:Patterns LAF, OptionCommand (wextends (PatDec p) w).
 
   (* Notation "x + y" := (sum x y). *)
   (* Definition NegVar w := @Neg w + w.(NLab). *)
 
-  Inductive cexists_as {w} : @OptionCommand w -> @Command w -> Prop :=
+  Inductive cexists_as {w} : OptionCommand w -> Command w -> Prop :=
     cnotnone: forall o, cexists_as (some o) o
   .
 
   Notation "x =cis= y" := (cexists_as x y) (at level 30, right associativity).
 
-  Lemma somecis {w u} {c: @Command w} : u =cis= c -> u = some c.
+  Lemma somecis {w u} {c: Command w} : u =cis= c -> u = some c.
   Proof.
       by elim.
   Qed.
@@ -320,14 +320,14 @@ Example:
 
   (* Here is the typing system *)
 
-  Inductive PosTyping {w} (Gamma: TContext w): @Pos w -> Inst Molecule w.(QLab) -> Prop :=
+  Inductive PosTyping {w} (Gamma: TContext w): Pos w -> Inst Molecule w.(QLab) -> Prop :=
   | typingpos: forall p l v Delta A (tl:TList w.(QLab) l),
                  PatternsTyped p Delta A
                  -> DecTyping Gamma v Delta tl 
                  -> PosTyping Gamma (pos p v) [A,tl]
                              
   with DecTyping {w} (Gamma: TContext w)
-       : forall l {st}, @TermDec w st -> @TypingDec LAF st l -> TList w.(QLab) l -> Prop :=
+       : forall l {st}, TermDec w st -> TypingDec st l -> TList w.(QLab) l -> Prop :=
        | typingsub_leafl: forall l xp x (tl:TList w.(QLab) l),
                             is_eq (Treadp Gamma xp) [x,tl]
                             -> DecTyping Gamma (tleafP xp) (TleafP x) tl
@@ -335,34 +335,34 @@ Example:
                             NegTyping Gamma nt [A,tl] ->
                             DecTyping Gamma (tleafN nt) (TleafN A) tl
        | typingsub_dummy: forall l (tl:TList w.(QLab) l),
-                            DecTyping Gamma tdummy Tdummy tl
-       | typingsub_node: forall l s1 s2 (v1:TermDec s1) (v2:TermDec s2)
+                            DecTyping Gamma (tdummy w) Tdummy tl
+       | typingsub_node: forall l s1 s2 (v1:TermDec w s1) (v2:TermDec w s2)
                            Delta1 Delta2 (tl:TList w.(QLab) l),
                            DecTyping Gamma v1 Delta1 tl
                            -> DecTyping Gamma v2 Delta2 tl
                            -> DecTyping Gamma (tnode v1 v2) (Tnode Delta1 Delta2) tl
-       | typingsub_qnode: forall l s (v:TermDec s) so Delta r (tl:TList w.(QLab) l),
+       | typingsub_qnode: forall l s (v:TermDec w s) so Delta r (tl:TList w.(QLab) l),
                             SortingRel (TreadE Gamma) r so
                             -> DecTyping Gamma v Delta (TermCons so r tl)
                             -> DecTyping Gamma (tqnode r v) (Tqnode Delta) tl
 
-  with NegTyping {w} (Gamma: TContext w) : @Neg w -> Inst Molecule w.(QLab) -> Prop :=
+  with NegTyping {w} (Gamma: TContext w) : Neg w -> Inst Molecule w.(QLab) -> Prop :=
        | typingneg: forall f l A tl,
                       (forall p c, f p =cis= c -> exists Delta, PatternsTyped p Delta A)
                       ->
                       (forall p (Delta:TypingDec _ l), (PatternsTyped p Delta A)
-                                              -> @OptionCommandTyping 
-                                                  (wextends (PatDec p) w)
+                                              -> OptionCommandTyping 
+                                                  (w := wextends (PatDec p) w)
                                                   (Textends [Delta,tl] Gamma) 
                                                   (f p))
                       -> NegTyping Gamma (rei f) [A,tl]
 
-  with OptionCommandTyping {w} (Gamma: TContext w): @OptionCommand w -> Prop :=
+  with OptionCommandTyping {w} (Gamma: TContext w): OptionCommand w -> Prop :=
        | typingoption: forall c,
                          CommandTyping Gamma c
                          -> OptionCommandTyping Gamma (some c)
 
-  with CommandTyping {w} (Gamma: TContext w): @Command w -> Prop :=
+  with CommandTyping {w} (Gamma: TContext w): Command w -> Prop :=
        | typingcut: forall nt pt A,
                       NegTyping Gamma nt A
                       -> PosTyping Gamma pt A

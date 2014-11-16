@@ -46,7 +46,7 @@ Section SemanticsNE.
     apply: orthVal.
   Qed.
 
-  Print Assumptions TypedIsVal.
+  (* Print Assumptions TypedIsVal. *)
 
 End SemanticsNE.
 

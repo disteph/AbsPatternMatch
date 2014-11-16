@@ -58,14 +58,14 @@ Then we have
       end.
 
   (* The semantics of a negative term is a negative element of the model *)
-  Definition SemN w (rho: M.(SContexts) w) (tm : Neg) := 
+  Definition SemN w (rho: M.(SContexts) w) (tm : Neg w) := 
     match tm with
       | rei f => I rho f
     end
   .
 
   (* The semantics of a TermDec is a SemTree *)
-  Fixpoint SemDec w (rho:M.(SContexts) w) {st} (v : TermDec st) {struct v} :=
+  Fixpoint SemDec w (rho:M.(SContexts) w) {st} (v : TermDec w st) {struct v} :=
     match v in @TermDec _ _ s return SDec s with
       | tleafP xp => leafP (readp rho xp)
       | tleafN tm => leafN (SemN rho tm)
@@ -76,7 +76,7 @@ Then we have
   .
 
   (* The semantics of a positive term is a positive element of the model *)
-  Definition SemP w (rho:M.(SContexts) w) (pt : Pos) := 
+  Definition SemP w (rho:M.(SContexts) w) (pt : Pos w) := 
     match pt with
         pos p v => tild p (SemDec rho v)
     end
@@ -85,14 +85,14 @@ Then we have
   (* The semantics of a command is a pair (negative element,positive
 element) of the model, that may or may not be orthogonal *) 
 
-  Definition SemC w (rho:M.(SContexts) w) (c : Command) :=
+  Definition SemC w (rho:M.(SContexts) w) (c : Command w) :=
     match c with
       | cut tm tp => (SemN rho tm,SemP rho tp) 
       | select xm tp => (rho.(readn) xm,SemP rho tp)
     end 
   .
 
-  Definition SemOptionC w (rho:M.(SContexts) w)(oc : OptionCommand) :=
+  Definition SemOptionC w (rho:M.(SContexts) w)(oc : OptionCommand w) :=
     match oc with
       | some c => Some(SemC (rho:M.(SContexts) w) c)
       | none => None
@@ -514,7 +514,7 @@ orthogonality relation be closed "under anti-reduction" *)
          ->  forall rho:M.(SContexts) w, SemCont Gamma rho
                  -> Pard SemPos (readE rho) A (SemP rho pt)
       )
-      /\ (forall l st (v:TermDec st) Delta tl,
+      /\ (forall l st (v:TermDec w st) Delta tl,
            DecTyping Gamma v Delta tl
            ->  forall rho:M.(SContexts) w, SemCont Gamma rho
                    -> SemTDec (l:=l) Delta (SemTermList (readE rho) tl) (SemDec rho v)

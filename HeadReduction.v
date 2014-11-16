@@ -80,7 +80,7 @@ Proof.
   move => w f p d rho x H.
   have: (forall f' rho', 
            clNeg(rei f,rho) = clNeg (rei f',rho')
-           -> forall c' : Command (LAF:=LAF),
+           -> forall c' : Command _ (LAF:=LAF),
                f' p =cis= c' ->
                x =
                {{wextends (l:=LAF) (PatDec (l:=LAF) p) w,
@@ -243,4 +243,4 @@ End Normalisation.
 
 End HeadReduction.
 
-Print Assumptions HeadNormalisation.
+(* Print Assumptions HeadNormalisation. *)

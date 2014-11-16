@@ -32,17 +32,26 @@ Section LAFwE.
         lift2Terms qLab qLab' 
         : (qLab -> qLab') -> Terms (q:= get asQS) qLab -> Terms (q:= get asQS) qLab';
 
+        lift2Terms_asT qLab qLab' (f:qLab -> qLab')
+        : forall xq:qLab, lift2Terms f (asT xq) = asT (f xq);
+
+        lift2Terms_comp qLab0 qLab1 qLab2
+                        (f1:qLab0 -> qLab1)
+                        (f2:qLab1 -> qLab2)
+                        (f3:qLab0 -> qLab2)
+        : (forall xq:qLab0, f3 xq = f2(f1 xq))
+          -> (forall t:Terms (q:= get asQS) qLab0, lift2Terms f3 t = lift2Terms f2(lift2Terms f1 t));
+
         qLabSorting qLab : 
           forall Sigma (xq:qLab) s, SortingRel Sigma (asT xq) s <-> s = Sigma xq;
 
         renSorting qLab qLab' :
-          forall (pi:qLab -> qLab') Sigma r s, 
-            SortingRel (q:=get asQS) (comp Sigma pi) r s
+          forall (pi:qLab -> qLab') Sigma Sigma' r s, 
+            (forall xq, Sigma(pi xq) = Sigma' xq)
+            -> SortingRel (q:=get asQS) Sigma' r s
             -> SortingRel (q:=get asQS) Sigma (lift2Terms pi r) s;
 
-        wextendsE : DecStruct -> World (get asQS) -> World (get asQS);
-        Extren {w:World (get asQS)} st: (w.(QLab):Type) -> ((wextendsE st w).(QLab):Type);
-        Extst  {w:World (get asQS)} st: @Dec (wextendsE st w).(QLab) unit unit st
+        wextendsE : DecStruct -> World (get asQS) -> World (get asQS)
       }.
 
   Canonical QSwE2QS `(QuantifyingStructureswE) := @QSwE2QS_base So Te SoR.
@@ -56,10 +65,68 @@ Section LAFwE.
         | TermCons so r l' tl' => TermCons so (lift2Terms pi r) (renTList pi tl')
     end.
 
+  Lemma renTList_comp `{QuantifyingStructureswE} qLab0 qLab1 qLab2
+        (f1:qLab0 -> qLab1)
+        (f2:qLab1 -> qLab2)
+        (f3:qLab0 -> qLab2)
+        ls
+  : (forall xq:qLab0, f3 xq = f2(f1 xq))
+    -> (forall tl:TList qLab0 ls, renTList f3 tl = renTList f2(renTList f1 tl)).
+  Proof.
+    move => H0.
+    elim => //.
+    move => s head l tail IH /=.
+    rewrite IH (lift2Terms_comp (qLab1 := qLab1) (f1 := f1) (f2 := f2) _ head) => //.
+  Qed.
+
   Definition renInst `{QuantifyingStructureswE}
              qLab qLab' (pi:qLab -> qLab')
              {A} (Alr: Inst A qLab): Inst A qLab'
     := [getA Alr,renTList pi (getTerms Alr)].
+
+  Lemma renInst_comp `{QuantifyingStructureswE} qLab0 qLab1 qLab2
+        (f1:qLab0 -> qLab1)
+        (f2:qLab1 -> qLab2)
+        (f3:qLab0 -> qLab2)
+        A
+  : (forall xq:qLab0, f3 xq = f2(f1 xq))
+    -> (forall Alr: Inst A qLab0, renInst f3 Alr = renInst f2(renInst f1 Alr)).
+  Proof.
+    move => H0.
+    elim => //.
+    move => x p /=.
+    rewrite /renInst /= (renTList_comp (qLab1 := qLab1) (f1 := f1) (f2 := f2)) => //.
+  Qed.
+
+  (* Enriching Quantifying structures with types (instantiated atoms
+  and molecules), now with eigenvariables *)
+
+  Definition QSTwE2QST_base `(QSV:QuantifyingStructureswE) AtomV MoleculeV is_eqV: QSTypes :=
+    {|
+      QS := QSwE2QS _;
+      Atom := AtomV;
+      Molecule := MoleculeV;
+      is_eq := is_eqV
+    |}
+  .
+
+  Class QSTypeswE `(QSwE : QuantifyingStructureswE) AtomV MoleculeV is_eqV
+    := 
+      {
+        Extren {w:World (get asQS)} st: (w.(QLab):Type) -> ((wextendsE st w).(QLab):Type);
+        Extst  {w:World (get asQS)} st: @Dec (wextendsE st w).(QLab) unit unit st;
+        asQSwE := QSwE;
+        asQST := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV;
+        is_eq_ren {qLab qLab'} 
+        : forall IA IA' : Inst (Atom (q:=asQST)) qLab,
+            is_eq IA IA'
+            -> forall pi:qLab -> qLab', is_eq (q:=asQST) (renInst pi IA) (renInst pi IA')
+      }.
+  
+  Coercion asQSwE: QSTypeswE >-> QuantifyingStructureswE.
+
+  Canonical QSTwE2QST `(QSTypeswE)
+    := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV.
 
   (* Stuff about generic contexts *)
 
@@ -67,21 +134,21 @@ Section LAFwE.
     := Contexts wextendsE A B C (fun qLab => (qLab:Type) -> C).
 
   Definition renProp
-             `{QuantifyingStructureswE} 
+             `{QSTypeswE} 
              `(Cont: ContextswE A B C)
     := forall w st (Gamma:Cont w) Delta xq, 
         readE (extends Delta Gamma)(Extren st xq) = readE Gamma xq.
 
   Definition stProp
-             `{QuantifyingStructureswE} 
+             `{QSTypeswE} 
              `(Cont: ContextswE A B C)
     := forall w st (Gamma:Cont w) Delta,
-        Declift (fun s xq => readE (extends Delta Gamma) xq = s)
+        Declift (fun s xq => s = readE (extends Delta Gamma) xq)
                 (fun _ _ => True)
                 (fun _ _ => True)
                 Delta (Extst st).
 
-  Definition Contlift `{QuantifyingStructureswE}{E F A B C D:Type}
+  Definition Contlift `{QSTypeswE}{E F A B C D:Type}
              (RelQ: E -> F -> Prop)
              (RelP: A -> C -> Prop)
              (RelN: B -> D -> Prop)
@@ -95,7 +162,7 @@ Section LAFwE.
         /\ (forall xn, RelN (readn Gamma xn) (readn rho xn))
   .
 
-  Definition ContMap `{QuantifyingStructureswE}{E F A B C D:Type}
+  Definition ContMap `{QSTypeswE}{E F A B C D:Type}
              (fQ: E -> F)
              (fP: A -> C)
              (fN: B -> D)
@@ -104,30 +171,6 @@ Section LAFwE.
              {w} 
   : Context1 w -> Context2 w -> Prop
     := Contlift (fun c c' => c' = fQ c) (fun c c' => c' = fP c) (fun c c' => c' = fN c).
-
-  (* Enriching Quantifying structures with types (instantiated atoms
-  and molecules), now with eigenvariables *)
-
-  Definition QSTwE2QST_base `(QSV:QuantifyingStructureswE) AtomV MoleculeV is_eqV: QSTypes :=
-    {|
-      QS := QSwE2QS QSV;
-      Atom := AtomV;
-      Molecule := MoleculeV;
-      is_eq := is_eqV
-    |}
-  .
-
-  Class QSTypeswE `(QSwE : QuantifyingStructureswE) AtomV MoleculeV is_eqV
-    := 
-      {
-        asQSwE := QSwE;
-        asQST := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV
-      }.
-  
-  Coercion asQSwE: QSTypeswE >-> QuantifyingStructureswE.
-
-  Canonical QSTwE2QST `(QSTypeswE)
-    := QSTwE2QST_base (QSV:=QSwE) (AtomV:=AtomV) MoleculeV is_eqV.
 
   (* Now we define typing contexts in the sense of LAF with eigenvariables *)
 
@@ -164,13 +207,14 @@ Section LAFwE.
              (Delta:TypingDec st ls)
   : @Dec (Sorts (QSwE2QS QSTV)) (Inst Atom qLab) (Inst Molecule qLab) st.
   Proof.
-    move:ls lq Delta.
-    induction st => ls lq Delta; inversion Delta; inversion qn => //=.
-    exact (leafP([X,lq])).
-    exact (leafN([X,lq])).
+    induction Delta.
+    exact (leafP([a,lq])).
+    exact (leafN([m,lq])).
     exact (dummy).
-    exact (node (IHst1 X1 ls lq X) (IHst2 X2 ls lq X0)).
-    exact (qnode so (IHst X1 (so::ls) (TermCons so (asT X0) lq) X)).
+    inversion qn.
+    exact (node (IHDelta1 X lq) (IHDelta2 X0 lq)).
+    inversion qn.
+    exact (qnode so (IHDelta X0 (TermCons so (asT X) lq))).
   Defined.
 
   Coercion TContextwE2TContext `(TCV: TContextswE) :=
@@ -225,7 +269,7 @@ Canonical LAFwE2LAF `(LAFswE)
 .
 
 
-Definition GenericCorr `{QuantifyingStructureswE}{E F A B C D:Type} 
+Definition GenericCorr `{QSTypeswE}{E F A B C D:Type} 
            (RelQ: E -> F -> Prop)
            (RelP: A -> C -> Prop)
            (RelN: B -> D -> Prop)
