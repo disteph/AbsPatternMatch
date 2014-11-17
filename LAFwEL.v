@@ -290,7 +290,7 @@ Section LAFwEL.
     ].
   Qed.
   
-  Hypothesis liftembeds
+  Hypothesis RenamingCorrelation
   : forall (qLab: QWorld (asLAF (LAFswE:= L))) 
       (w1 w2 : World (asLAF (LAFswE:= L)))
       (Gamma1: TCV qLab w1)
@@ -487,7 +487,7 @@ Section LAFwEL.
            (renTList (readE (ExtrenL wnew st)) (renTList (readE rho) tl))
            Delta))).
     apply: Lem55ter.
-    apply: liftembeds.
+    apply: RenamingCorrelation.
     refine (_ (TCmapProp (renInst (readE (ExtrenL wnew st)))
                          (renInst (readE (ExtrenL wnew st))) Gamma2));
       move => [H3 [H4 H5]].
@@ -519,7 +519,7 @@ Section LAFwEL.
     | by move => xq; rewrite /comp]).
   Qed.
 
-  Theorem typedlift:
+  Theorem RenamingTyping:
     forall (w:World (asLAF (LAFswE := L))) (Gamma1: TContext w),
       (forall pt A,
          PosTyping Gamma1 pt A
