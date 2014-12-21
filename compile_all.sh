@@ -1,0 +1,9 @@
+coqc Basic.v
+coqc LAF.v
+coqc Semantics.v
+coqc LAFwE.v
+coqc SemanticswE.v
+coqc NormalisationTheory.v
+coqc HeadReduction.v
+coqc LAFwEL.v
+coqc SemanticsNE.v
