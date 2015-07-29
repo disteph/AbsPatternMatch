@@ -571,7 +571,7 @@ Section LAFwEL.
       | apply H0 => // ]
     | apply typingneg
     | by apply: typingoption; apply: H0 
-    | by apply: typingcut; [apply H0| apply H1] 
+    | by apply: (typingcut (A:= (renInst (readE rho) A))); [ apply H0 | apply H1]
     |
     ].
 
