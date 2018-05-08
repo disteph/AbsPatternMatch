@@ -1,39 +1,48 @@
-Require Import ssreflect.
+Require Import mathcomp.ssreflect.ssreflect.
 
 (* Reduction theory *)
 
+(* Type of relations *)
 Definition Rel (A B:Type) := A -> B -> Prop.
+(* Type of reduction relations *)
 Definition Red (A:Type) := Rel A A.
 
-Definition Sub {A B:Type} (R1 R2: Rel A B) : Prop := forall a b, R1 a b -> R2 a b.
+(* Inclusion of a relation in another relation *)
+Definition Sub {A B} (R1 R2: Rel A B) : Prop := forall a b, R1 a b -> R2 a b.
 Notation "R1 <# R2" := (Sub R1 R2) (at level 50).
 
-Lemma SubRefl {A B:Type} (R: Rel A B) : Sub R R.
+(* Inclusion is reflexive *)
+Lemma SubRefl {A B} (R: Rel A B) : R <# R.
 Proof.
   done.
 Qed.
 
-Lemma SubTrans {A B:Type} (R2 R1 R3: Rel A B) : Sub R1 R2 -> Sub R2 R3 -> Sub R1 R3.
+(* Inclusion is transitive *)
+Lemma SubTrans {A B} (R2 R1 R3: Rel A B) : R1 <# R2 -> R2 <# R3 -> R1 <# R3.
 Proof.
   rewrite/Sub.
   auto.
 Qed.
 
-Definition Equiv {A B:Type} (R1 R2: Rel A B) := Sub R1 R2 /\ Sub R2 R1.
+(* Double inclusion, i.e. equivalence *)
+Definition Equiv {A B} (R1 R2: Rel A B) := R1 <# R2 /\ R2 <# R1.
 Notation "R1 -- R2" := (Equiv R1 R2) (at level 50).
 
-Inductive comp {A B C:Type} (red1: Rel A B)(red2: Rel B C) : Rel A C :=
+(* Composition of relations *)
+Inductive comp {A B C} (red1: Rel A B)(red2: Rel B C) : Rel A C :=
   compose: forall b a c,  red1 a b -> red2 b c -> comp red1 red2 a c
 .
 Notation "R1 # R2" := (comp R1 R2) (at level 40).
 Arguments compose {A B C red1 red2} _ _ _ _ _ .
 
-Inductive inverse {A B:Type} (R: Rel A B) : Rel B A :=
+(* Inverse of a relation *)
+Inductive inverse {A B} (R: Rel A B) : Rel B A :=
   inverseof: forall a b, R a b -> inverse R b a
 .
 
-Lemma compTrans {A B C D:Type} (R1: Rel A B)(R2: Rel B C)(R3: Rel C D)
-  : (R1 # R2) # R3 -- R1 # (R2#R3).
+(* Composition is associative *)
+Lemma compTrans {A B C D} (R1: Rel A B)(R2: Rel B C)(R3: Rel C D)
+  : (R1 # R2) # R3 -- R1 # (R2 # R3).
 Proof.
   rewrite /Equiv; split.
   rewrite/Sub.
@@ -50,8 +59,9 @@ Proof.
   apply (compose b0) => //.
 Qed.
 
-Lemma SubComp {A B C:Type} (R1 R2: Rel A B)(R3 R4: Rel B C) 
-: Sub R1 R2 -> Sub R3 R4 -> Sub (comp R1 R3)(comp R2 R4).
+(* Composition is monotonous *)
+Lemma SubComp {A B C} (R1 R2: Rel A B)(R3 R4: Rel B C) 
+: R1 <# R2 -> R3 <# R4 -> (comp R1 R3) <# (comp R2 R4).
 Proof.
   rewrite/Sub.
   move => H1 H2 a b; elim => a0 b0 c0 H3 H4.
@@ -60,21 +70,24 @@ Proof.
   auto.
 Qed.
 
-
-Inductive trans {A:Type} (red: Red A) : Red A :=
+(* Transitive closure of a reduction relation *)
+Inductive trans {A} (red: Red A) : Red A :=
 | singl: forall a b,  red a b -> trans red a b
 | transit: forall b a c,  red a b -> trans red b c -> trans red a c
 .
 
 Arguments transit {A} {red} _ _ _ _ _ .
 
-Lemma transSub {A:Type} (red: Red A) : Sub red (trans red).
+(* A reduction relation is included in its transitive closure *)
+Lemma transSub {A:Type} (red: Red A) : red <# (trans red).
 Proof.
   rewrite /Sub.
   move => a b H.
   apply singl => //.
 Qed.
 
+(* Given a path from a to b and a path from b to c,
+construction of the path from a to c *) 
 Lemma tailtransit {A red}: forall (b a c:A),  trans red a b -> trans red b c -> trans red a c.
 Proof.
   move => a b c H1 H2.
@@ -84,7 +97,8 @@ Proof.
   apply IHtrans =>//.
 Qed.
 
-Lemma SubTrans1 {A:Type} (red1 red2: Red A) : Sub red1 red2 -> Sub (trans red1)(trans red2).
+(* Transitive closure is monotonous *)
+Lemma SubTrans1 {A} (red1 red2: Red A) : red1 <# red2 -> (trans red1) <# (trans red2).
 Proof.
   rewrite /Sub => H a b H0.
   induction H0.
@@ -94,34 +108,43 @@ Proof.
   auto.
 Qed.
 
-Inductive Image {A B:Type} (R:Rel A B)(P: A -> Prop): B -> Prop
+(* Image of a predicate via a relation *)
+Inductive Image {A B} (R:Rel A B)(P: A -> Prop): B -> Prop
   := image: forall a b, P a -> R a b -> Image R P b.
 
 Arguments image {A B R P} _ _ _ _.
 
+(***************)
 (* Simulations *)
 
-Definition StrongSimul {A B:Type} (redA: Red A) (redB: Red B) (R: Rel A B) := 
-  Sub (comp (inverse R) redA) (comp (trans redB) (inverse R)).
+(* Strong simulation:
+redA is strongly simulated by redB through R
+(one step of redA yields at least one step of redB)
+*)
+Definition StrongSimul {A B} (redA: Red A) (redB: Red B) (R: Rel A B) := 
+  ((inverse R) # redA) <# ((trans redB) # (inverse R)).
 
-Lemma SimulMonotonic {A B:Type} (redA1 redA2: Red A) (redB1 redB2: Red B) (R: Rel A B):
-  Sub redA2 redA1 -> Sub redB1 redB2 -> StrongSimul redA1 redB1 R -> StrongSimul redA2 redB2 R.
+(* The fact that redA is strongly simulated by redB is
+monotonic in redB and anti-monotonic in redA *)
+Lemma SimulMonotonic {A B} (redA1 redA2: Red A) (redB1 redB2: Red B) (R: Rel A B):
+  redA2 <# redA1 -> redB1 <# redB2 -> StrongSimul redA1 redB1 R -> StrongSimul redA2 redB2 R.
 Proof.
   move => H1 H2.
   rewrite /StrongSimul.
   move => H3.
-  apply (SubTrans (comp (inverse R) redA1)).
+  apply (SubTrans ((inverse R) # redA1)).
   apply SubComp =>//.
-  apply: SubRefl.
-  apply (SubTrans (comp (trans redB1) (inverse R))) => //.
+  apply (SubTrans ((trans redB1) # (inverse R))) => //.
   apply SubComp =>//.
   apply SubTrans1 => //.
 Qed.
 
-Lemma SimulBoth {A B:Type} (redA1 redA2: Red A) (redB: Red B) (R: Rel A B):
+(* If redA1 and redA2 are strongly simulated by the same relation,
+so is their composition *)
+Lemma SimulBoth {A B} (redA1 redA2: Red A) (redB: Red B) (R: Rel A B):
   StrongSimul redA1 redB R
   -> StrongSimul redA2 redB R
-  -> StrongSimul (comp redA1 redA2) redB R.
+  -> StrongSimul (redA1 # redA2) redB R.
 Proof.
   rewrite /StrongSimul.
   move => H1 H2.
@@ -145,7 +168,8 @@ Proof.
   apply: (tailtransit b2) => //.
 Qed.
 
-Lemma SimulTrans {A B:Type} (redA: Red A) (redB: Red B) (R: Rel A B)
+(* If redA is strongly simulated, so is its transitive closure *)
+Lemma SimulTrans {A B} (redA: Red A) (redB: Red B) (R: Rel A B)
 : StrongSimul redA redB R -> StrongSimul (trans redA) redB R.
 Proof.
   rewrite /StrongSimul.
@@ -176,11 +200,14 @@ Proof.
   apply: (tailtransit b1) => //.
 Qed.
 
-Inductive refltrans {A:Type} (red: Red A) : Red A :=
+(* Reflexive and transitive closure of a relation *)
+Inductive refltrans {A} (red: Red A) : Red A :=
 | reflex: forall a,  refltrans red a a
 | atleast1: forall a b,  trans red a b -> refltrans red a b
 .
 
+(* The transitive closure is equivalent to the composition of the
+relation with its reflexive-transitive closure *)
 Lemma trans2refltrans {A} {red: Red A}: trans red -- red # (refltrans red).
 Proof.
   rewrite /Equiv/Sub.
@@ -197,15 +224,20 @@ Proof.
   apply:(transit b0) =>//.
 Qed.
 
+
+(*******************************)
 (* Strong Normalisation theory *)
 
-Definition patriarchal {A:Type} (red:Red A) (P:A -> Prop): Prop
+(* What it means for a predicate to be patriarchal *)
+Definition patriarchal {A} (red:Red A) (P:A -> Prop): Prop
   := forall x, (forall y, red x y -> P y) -> P x.
 
+(* a is strongly normalising for red *)
 Definition SN {A:Type} (red:Red A) (a:A): Prop
   := forall P, patriarchal red P -> P a.
 
-Lemma toSN {A:Type}{red:Red A} {x}: (forall y, red x y -> SN red y) -> SN red x.
+(* If all 1-step reducts of a are SN, so is a *)
+Lemma toSN {A}{red:Red A} {x}: (forall y, red x y -> SN red y) -> SN red x.
 Proof.
   rewrite/SN => H P H1.
   move:(H1); rewrite/patriarchal.
@@ -213,6 +245,7 @@ Proof.
   apply H => //.
 Qed.
 
+(* Being SN is a patriarchal predicate *)
 Lemma SNpatriarchal {A} {red: Red A}: patriarchal red (SN red). 
 Proof.
   rewrite /patriarchal => M H.
@@ -221,6 +254,7 @@ Proof.
   apply => //.
 Qed.
 
+(* If M is SN, so are its 1-step reducts *)
 Lemma SNstable {A} {red: Red A}: forall M, SN red M -> forall N, red M N -> SN red N.
 Proof.
   have : (patriarchal red (fun a => forall b, red a b -> SN red b)).
@@ -229,9 +263,14 @@ Proof.
   rewrite /patriarchal in H1 => R HR.
   apply: H1.
   apply: H => //.
-               intros.            
-    by apply (H _ x).
+  intros.            
+  by apply (H _ x).
 Qed.
+
+(* Induction principle:
+Let P be a predicate such that, for all SN elements a, if the 1-step
+reducts of a satisfy P then a satisfies P.
+Then all SN elements satisfy P *)
 
 Theorem SNind {A} {red: Red A} {P: A -> Prop}
 : (forall a, (forall b, red a b -> P b) -> SN red a -> P a)
@@ -241,13 +280,14 @@ Proof.
   have: (patriarchal red (fun a => SN red a -> P a)).
   rewrite /patriarchal => N H H0.
   apply: H3 =>//.
-            move => R H2.
+  move => R H2.
   apply: H => //.
-               apply (SNstable N) => //.
-                                      move => H0 M H1.
+  apply (SNstable N) => //.
+  move => H0 M H1.
   apply: (H1 (fun a : A => SN red a -> P a)) => //.
 Qed.
 
+(* Being patriarchal for red1 is monotonic in red1 *)
 Lemma Patriarchalmonotonic {A} {red1 red2: Red A}: 
   red1 <# red2 -> forall P, patriarchal red1 P -> patriarchal red2 P.
 Proof.
@@ -258,6 +298,7 @@ Proof.
   apply H0 =>//.
 Qed.
 
+(* Being SN for red1 is anti-monotonic in red1 *)
 Lemma SNmonotonic {A} {red1 red2: Red A}: red1 <# red2 -> forall a, SN red2 a -> SN red1 a.
 Proof.
   rewrite/SN.
@@ -266,6 +307,7 @@ Proof.
   apply: (Patriarchalmonotonic H0 P H2).
 Qed.
 
+(* Being SN for a relation is the same thing as being SN for its transitive closure *)
 Lemma SNSNtrans {A} {red: Red A}: forall a, SN red a <-> SN (trans red) a.
 Proof.
   split;[| apply: SNmonotonic => //; apply transSub].
@@ -290,6 +332,17 @@ Proof.
   apply: reflex.
 Qed.
 
+(* Strong Induction principle:
+Let P be a predicate such that, for all SN elements a, if the n-step
+reducts of a satisfy P then a satisfies P.
+Then all SN elements satisfy P.
+
+This theorem is stronger than the previous version, since the
+induction hypothesis can be applied not only to the 1-step reducts,
+but to all n-step reducts. In the natural numbers, we can assume the
+IH holds not only for n-1, but for all m<n.
+*)
+
 Theorem SNsind {A} {red: Red A} {P: A -> Prop}
 : (forall a, (forall b, trans red a b -> P b) -> SN red a -> P a)
   -> (forall a, SN red a -> P a).
@@ -303,6 +356,11 @@ Proof.
   apply SNSNtrans =>//.
 Qed.
 
+(* Strong normalisation by simulation:
+Assume redA is strongly simulated by redB through R.
+If a is the image of some element that is SN for redB,
+then a is SN for redA.
+*)
 Theorem SNbySimul {A B} {redA: Red A} {redB: Red B} {R: Rel A B}:
 StrongSimul redA redB R -> forall a, Image (inverse R) (SN redB) a -> SN redA a.
 Proof.

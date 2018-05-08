@@ -4,7 +4,7 @@ Unset Printing Implicit Defensive.
 Generalizable All Variables.
 Typeclasses eauto := 1.
 
-Require Import ssreflect Basic LAF LAFwE Semantics List Coq.Program.Equality.
+Require Import mathcomp.ssreflect.ssreflect Basic LAF LAFwE Semantics List Coq.Program.Equality.
 
 Section SemanticswE.
 

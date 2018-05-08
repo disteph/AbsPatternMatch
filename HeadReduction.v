@@ -3,7 +3,7 @@ Unset Strict Implicit.
 Set Maximal Implicit Insertion.
 Open Scope type_scope.
 
-Require Import ssreflect LAF Semantics NormalisationTheory Basic.
+Require Import mathcomp.ssreflect.ssreflect LAF Semantics NormalisationTheory Basic.
 
 Section HeadReduction.
 
@@ -106,7 +106,7 @@ Section HeadReduction.
       move => f' rho' H0 c' H1.
       move:(clNegInj H0); clear H0 H; move => [H H0].
       rewrite H0;clear H0.
-      inversion c0; clear c0.
+      inversion c1; clear c1.
       rewrite H in H2;clear H.
       inversion H1; clear H1.
       rewrite <- H2 in H3; clear H2.

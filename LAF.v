@@ -3,7 +3,7 @@ Unset Strict Implicit.
 Set Maximal Implicit Insertion.
 Open Scope type_scope.
 
-Require Import ssreflect List Basic Equality.
+Require Import mathcomp.ssreflect.ssreflect List Basic Equality.
 
 Section QuantifyingStructure.
   (*************************)

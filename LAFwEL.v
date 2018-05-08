@@ -4,7 +4,7 @@ Generalizable All Variables.
 Unset Printing Implicit Defensive.
 Typeclasses eauto := 1.
 
-Require Import ssreflect List Basic LAF LAFwE.
+Require Import mathcomp.ssreflect.ssreflect List Basic LAF LAFwE.
 
 Section LAFwEL.
 
@@ -27,6 +27,13 @@ Section LAFwEL.
         | qnode _ t qnew' => qnode t (ExtstL2Extst qnew')
       end.
 
+  Print QSTypeswE.
+
+  Check @is_eq.
+  Check renInst.
+  Check @QSTwE2QST_base.
+  Check QWorld.
+  Set Printing All.
   Definition QSTypeswEL2QSTypeswE_base `(QSwE : QuantifyingStructureswE)
              AtomV 
              MoleculeV

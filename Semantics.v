@@ -2,7 +2,7 @@ Set Implicit Arguments.
 Unset Strict Implicit.
 Set Maximal Implicit Insertion.
 
-Require Import ssreflect Basic LAF List Coq.Program.Equality.
+Require Import mathcomp.ssreflect.ssreflect Basic LAF List Coq.Program.Equality.
 
 Section Semantics.
 

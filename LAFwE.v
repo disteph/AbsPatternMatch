@@ -3,7 +3,7 @@ Unset Strict Implicit.
 Generalizable All Variables.
 Typeclasses eauto := 1.
 
-Require Import ssreflect List Basic LAF.
+Require Import mathcomp.ssreflect.ssreflect List Basic LAF.
 
 Definition comp {A B C} (g:B -> C) (f:A -> B) x := g(f x).
 
