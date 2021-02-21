@@ -1,6 +1,6 @@
 # AbsPatternMatch
 This is the formalisation, in the proof assistant Coq, of Abstract Pattern-Matching / Abstract Focussing.
-The language is described in Part II of the [Habilitation thesis](http://www.lix.polytechnique.fr/~lengrand/Work/HDR/Dissertation/Main.pdf).
+The language is described in Part II of the [Habilitation thesis](http://www.csl.sri.com/users/sgl/Work/HDR/Dissertation/Main.pdf).
 
 **Compatibility**: This formalisation is done in Coq v8.4.6 and Ssreflect 1.6.1, both available from opam, the package manager for [OCaml](https://opam.ocaml.org/) (e.g. ```opam install coq.8.4.6 coq-mathcomp-ssreflect.1.6.1```). Porting to more recent versions of Coq and ssreflect is on the to-do list.
 
